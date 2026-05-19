@@ -3,1478 +3,1106 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>ARAUCO México — Análisis Macroeconómico</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<title>ARAUCO México — Análisis Macroeconómico 2026</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Inter:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
-  :root {
-    --green-dark: #1a3a1f;
-    --green-mid: #2d6a35;
-    --green-light: #4a9455;
-    --green-accent: #6bbf72;
-    --gold: #c9a84c;
-    --gold-light: #e8c96a;
-    --cream: #f5f0e8;
-    --white: #ffffff;
-    --gray-100: #f8f8f6;
-    --gray-200: #ebebeb;
-    --gray-500: #8a8a8a;
-    --gray-800: #2a2a2a;
-    --red-risk: #c0392b;
-    --blue-data: #1a4a7a;
-    --shadow-lg: 0 20px 60px rgba(26,58,31,0.15);
-    --shadow-card: 0 4px 24px rgba(0,0,0,0.08);
-    --radius: 4px;
-    --radius-lg: 12px;
-  }
-
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html { scroll-behavior: smooth; }
-
-  body {
-    font-family: 'DM Sans', sans-serif;
-    background: var(--gray-100);
-    color: var(--gray-800);
-    overflow-x: hidden;
-  }
-
-  /* ── COVER PAGE ── */
-  #cover {
-    min-height: 100vh;
-    background: var(--green-dark);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden;
-  }
-
-  #cover::before {
-    content: '';
-    position: absolute; inset: 0;
-    background:
-      radial-gradient(ellipse 80% 60% at 50% 110%, rgba(74,148,85,0.25) 0%, transparent 70%),
-      radial-gradient(ellipse 50% 40% at 85% 20%, rgba(201,168,76,0.12) 0%, transparent 60%);
-  }
-
-  .cover-lines {
-    position: absolute; inset: 0;
-    background-image:
-      repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(255,255,255,0.03) 80px),
-      repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(255,255,255,0.03) 80px);
-  }
-
-  .cover-content {
-    position: relative; z-index: 2;
-    text-align: center;
-    padding: 40px 24px;
-    max-width: 800px;
-    animation: fadeUp 1.2s cubic-bezier(.22,1,.36,1) both;
-  }
-
-  @keyframes fadeUp {
-    from { opacity:0; transform: translateY(40px); }
-    to   { opacity:1; transform: translateY(0); }
-  }
-
-  .cover-eyebrow {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 28px;
-    opacity: 0;
-    animation: fadeUp .8s .3s cubic-bezier(.22,1,.36,1) forwards;
-  }
-
-  .cover-logo-box {
-    display: inline-flex;
-    align-items: center;
-    gap: 16px;
-    margin-bottom: 36px;
-    opacity: 0;
-    animation: fadeUp .8s .5s cubic-bezier(.22,1,.36,1) forwards;
-  }
-
-  .logo-icon {
-    width: 56px; height: 56px;
-    background: var(--green-accent);
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-  }
-
-  .logo-icon svg { width: 32px; height: 32px; fill: var(--green-dark); }
-
-  .logo-text {
-    font-family: 'Playfair Display', serif;
-    font-size: 40px;
-    font-weight: 900;
-    color: var(--white);
-    letter-spacing: -1px;
-  }
-
-  .logo-sub {
-    font-size: 13px;
-    color: var(--green-accent);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    font-weight: 500;
-  }
-
-  .cover-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(32px, 6vw, 64px);
-    font-weight: 700;
-    color: var(--white);
-    line-height: 1.1;
-    margin-bottom: 20px;
-    opacity: 0;
-    animation: fadeUp .8s .7s cubic-bezier(.22,1,.36,1) forwards;
-  }
-
-  .cover-title span { color: var(--gold-light); }
-
-  .cover-desc {
-    font-size: 16px;
-    color: rgba(255,255,255,0.6);
-    line-height: 1.7;
-    max-width: 520px;
-    margin: 0 auto 48px;
-    opacity: 0;
-    animation: fadeUp .8s .9s cubic-bezier(.22,1,.36,1) forwards;
-  }
-
-  .cover-stats {
-    display: flex;
-    gap: 32px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 56px;
-    opacity: 0;
-    animation: fadeUp .8s 1.1s cubic-bezier(.22,1,.36,1) forwards;
-  }
-
-  .cover-stat {
-    text-align: center;
-  }
-
-  .cover-stat-val {
-    font-family: 'Playfair Display', serif;
-    font-size: 28px;
-    font-weight: 700;
-    color: var(--gold-light);
-  }
-
-  .cover-stat-lbl {
-    font-size: 11px;
-    color: rgba(255,255,255,0.45);
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-top: 4px;
-  }
-
-  .cover-stat-div {
-    width: 1px; background: rgba(255,255,255,0.15);
-    align-self: stretch;
-  }
-
-  .btn-enter {
-    display: inline-flex;
-    align-items: center;
-    gap: 12px;
-    background: var(--gold);
-    color: var(--green-dark);
-    font-family: 'DM Sans', sans-serif;
-    font-weight: 600;
-    font-size: 15px;
-    letter-spacing: .5px;
-    padding: 16px 40px;
-    border: none;
-    border-radius: 2px;
-    cursor: pointer;
-    text-decoration: none;
-    transition: background .25s, transform .2s;
-    opacity: 0;
-    animation: fadeUp .8s 1.3s cubic-bezier(.22,1,.36,1) forwards;
-  }
-
-  .btn-enter:hover { background: var(--gold-light); transform: translateY(-2px); }
-
-  .btn-enter svg { width: 18px; height: 18px; }
-
-  .cover-scroll {
-    position: absolute;
-    bottom: 32px;
-    left: 50%;
-    transform: translateX(-50%);
-    color: rgba(255,255,255,0.3);
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    display: flex; flex-direction: column; align-items: center; gap: 8px;
-    animation: bobble 2s ease-in-out infinite;
-  }
-
-  @keyframes bobble {
-    0%, 100% { transform: translateX(-50%) translateY(0); }
-    50% { transform: translateX(-50%) translateY(6px); }
-  }
-
-  /* ── NAV ── */
-  nav {
-    position: sticky; top: 0; z-index: 100;
-    background: var(--green-dark);
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 0 48px;
-    height: 64px;
-  }
-
-  .nav-brand {
-    font-family: 'Playfair Display', serif;
-    font-size: 22px;
-    font-weight: 700;
-    color: var(--white);
-    text-decoration: none;
-    display: flex; align-items: center; gap: 10px;
-  }
-
-  .nav-brand span { color: var(--gold); }
-
-  .nav-links {
-    display: flex; gap: 32px; list-style: none;
-  }
-
-  .nav-links a {
-    font-size: 13px;
-    font-weight: 500;
-    letter-spacing: .5px;
-    color: rgba(255,255,255,0.6);
-    text-decoration: none;
-    text-transform: uppercase;
-    transition: color .2s;
-    padding: 4px 0;
-    border-bottom: 2px solid transparent;
-  }
-
-  .nav-links a:hover,
-  .nav-links a.active { color: var(--gold); border-bottom-color: var(--gold); }
-
-  /* ── SECTIONS ── */
-  section { padding: 80px 48px; max-width: 1280px; margin: 0 auto; }
-
-  .section-eyebrow {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--green-mid);
-    margin-bottom: 12px;
-  }
-
-  .section-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(28px, 4vw, 44px);
-    font-weight: 700;
-    color: var(--green-dark);
-    line-height: 1.15;
-    margin-bottom: 16px;
-  }
-
-  .section-title span { color: var(--green-mid); }
-
-  .section-lead {
-    font-size: 16px;
-    color: var(--gray-500);
-    line-height: 1.8;
-    max-width: 620px;
-    margin-bottom: 56px;
-  }
-
-  .divider-line {
-    width: 60px; height: 3px;
-    background: var(--gold);
-    margin-bottom: 32px;
-  }
-
-  /* ── SOBRE ARAUCO ── */
-  #sobre {
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    box-shadow: var(--shadow-card);
-    margin: 0 24px 0;
-    padding: 72px 64px;
-    max-width: none;
-  }
-
-  .sobre-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 64px;
-    align-items: start;
-  }
-
-  .sobre-kpis {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
-    margin-top: 40px;
-  }
-
-  .kpi-card {
-    background: var(--gray-100);
-    border-left: 3px solid var(--green-accent);
-    padding: 20px 24px;
-    border-radius: var(--radius);
-  }
-
-  .kpi-val {
-    font-family: 'Playfair Display', serif;
-    font-size: 26px;
-    font-weight: 700;
-    color: var(--green-dark);
-  }
-
-  .kpi-lbl {
-    font-size: 12px;
-    color: var(--gray-500);
-    margin-top: 4px;
-    letter-spacing: .3px;
-  }
-
-  .sobre-timeline {
-    position: relative;
-    padding-left: 32px;
-  }
-
-  .sobre-timeline::before {
-    content: '';
-    position: absolute; left: 8px; top: 8px; bottom: 8px;
-    width: 2px;
-    background: linear-gradient(to bottom, var(--green-accent), var(--gold));
-  }
-
-  .tl-item {
-    margin-bottom: 28px;
-    position: relative;
-  }
-
-  .tl-dot {
-    position: absolute; left: -28px; top: 6px;
-    width: 12px; height: 12px;
-    background: var(--green-accent);
-    border-radius: 50%;
-    border: 2px solid var(--white);
-    box-shadow: 0 0 0 2px var(--green-accent);
-  }
-
-  .tl-year {
-    font-family: 'DM Mono', monospace;
-    font-size: 11px;
-    color: var(--gold);
-    letter-spacing: 1px;
-    margin-bottom: 4px;
-  }
-
-  .tl-text {
-    font-size: 14px;
-    color: var(--gray-800);
-    line-height: 1.6;
-  }
-
-  /* ── MACRO SECTION ── */
-  #macro { background: var(--gray-100); }
-
-  .macro-header {
-    display: flex; align-items: flex-start; justify-content: space-between; flex-wrap: wrap;
-    gap: 24px; margin-bottom: 48px;
-  }
-
-  .usdmxn-badge {
-    background: var(--green-dark);
-    color: var(--white);
-    padding: 20px 32px;
-    border-radius: var(--radius-lg);
-    text-align: center;
-    min-width: 200px;
-  }
-
-  .usdmxn-rate {
-    font-family: 'Playfair Display', serif;
-    font-size: 36px;
-    font-weight: 700;
-    color: var(--gold-light);
-    line-height: 1;
-  }
-
-  .usdmxn-label {
-    font-size: 11px;
-    color: rgba(255,255,255,0.5);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    margin-top: 6px;
-  }
-
-  .usdmxn-date {
-    font-size: 11px;
-    color: rgba(255,255,255,0.35);
-    margin-top: 4px;
-  }
-
-  .indicators-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
-    gap: 24px;
-  }
-
-  .ind-card {
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-card);
-    transition: transform .25s, box-shadow .25s;
-  }
-
-  .ind-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
-
-  .ind-header {
-    padding: 24px 28px 20px;
-    border-bottom: 1px solid var(--gray-200);
-    display: flex; align-items: center; gap: 16px;
-  }
-
-  .ind-icon {
-    width: 44px; height: 44px;
-    border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 20px;
-    flex-shrink: 0;
-  }
-
-  .ind-name { font-weight: 600; font-size: 15px; color: var(--green-dark); }
-  .ind-sub  { font-size: 12px; color: var(--gray-500); margin-top: 2px; }
-
-  .ind-body { padding: 24px 28px; }
-
-  .ind-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--gray-200);
-  }
-
-  .ind-row:last-child { border-bottom: none; }
-
-  .ind-country {
-    font-size: 12px; font-weight: 600; letter-spacing: .5px;
-    text-transform: uppercase; color: var(--gray-500);
-  }
-
-  .ind-val {
-    font-family: 'Playfair Display', serif;
-    font-size: 20px;
-    font-weight: 700;
-  }
-
-  .ind-impact {
-    display: flex; align-items: center; gap: 6px;
-    padding: 10px 0;
-    font-size: 13px;
-  }
-
-  .badge {
-    display: inline-flex; align-items: center; gap: 4px;
-    font-size: 11px; font-weight: 600; letter-spacing: .5px;
-    padding: 3px 10px;
-    border-radius: 20px;
-    text-transform: uppercase;
-  }
-
-  .badge-up   { background: #e8f5e9; color: #2e7d32; }
-  .badge-down { background: #ffebee; color: #c62828; }
-  .badge-neutral { background: #fff8e1; color: #f57f17; }
-
-  .ind-relevance {
-    background: var(--gray-100);
-    border-radius: var(--radius);
-    padding: 12px 16px;
-    font-size: 13px;
-    line-height: 1.6;
-    color: var(--gray-800);
-    margin-top: 12px;
-    border-left: 3px solid var(--green-accent);
-  }
-
-  /* ── BAR CHART ── */
-  .chart-wrapper {
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    padding: 32px;
-    box-shadow: var(--shadow-card);
-    margin-top: 40px;
-  }
-
-  .chart-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 18px;
-    color: var(--green-dark);
-    margin-bottom: 24px;
-  }
-
-  .bar-group {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-  }
-
-  .bar-item { display: flex; align-items: center; gap: 12px; }
-
-  .bar-label {
-    width: 160px;
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--gray-800);
-    flex-shrink: 0;
-    text-align: right;
-  }
-
-  .bar-track {
-    flex: 1;
-    height: 28px;
-    background: var(--gray-200);
-    border-radius: 2px;
-    overflow: hidden;
-    position: relative;
-  }
-
-  .bar-fill {
-    height: 100%;
-    border-radius: 2px;
-    display: flex; align-items: center;
-    padding-left: 10px;
-    font-size: 12px;
-    font-weight: 600;
-    color: var(--white);
-    width: 0;
-    transition: width 1.4s cubic-bezier(.22,1,.36,1);
-  }
-
-  .bar-mx { background: linear-gradient(90deg, var(--green-mid), var(--green-accent)); }
-  .bar-us { background: linear-gradient(90deg, var(--blue-data), #2980b9); }
-
-  /* ── RIESGOS ── */
-  #riesgos { background: var(--white); margin: 0; max-width: none; padding: 72px 64px; }
-
-  .risks-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 24px;
-  }
-
-  .risk-card {
-    border-radius: var(--radius-lg);
-    padding: 28px;
-    position: relative;
-    overflow: hidden;
-    transition: transform .25s;
-  }
-
-  .risk-card:hover { transform: translateY(-3px); }
-
-  .risk-card::before {
-    content: '';
-    position: absolute; top: 0; left: 0; right: 0;
-    height: 3px;
-  }
-
-  .risk-high::before   { background: var(--red-risk); }
-  .risk-mid::before    { background: var(--gold); }
-  .risk-low::before    { background: var(--green-accent); }
-
-  .risk-high { background: #fff5f5; }
-  .risk-mid  { background: #fffbf0; }
-  .risk-low  { background: #f0f9f0; }
-
-  .risk-icon { font-size: 28px; margin-bottom: 12px; }
-  .risk-title { font-weight: 700; font-size: 16px; color: var(--green-dark); margin-bottom: 8px; }
-  .risk-text  { font-size: 13px; line-height: 1.7; color: var(--gray-800); }
-
-  .risk-level {
-    display: inline-block;
-    margin-top: 12px;
-    font-size: 10px;
-    font-weight: 700;
-    letter-spacing: 1.5px;
-    text-transform: uppercase;
-    padding: 3px 10px;
-    border-radius: 20px;
-  }
-
-  .lvl-high { background: #fde8e8; color: var(--red-risk); }
-  .lvl-mid  { background: #fef3cd; color: #856404; }
-  .lvl-low  { background: #d4edda; color: #155724; }
-
-  /* ── NOTICIAS ── */
-  #noticias { background: var(--gray-100); }
-
-  .news-card {
-    background: var(--white);
-    border-radius: var(--radius-lg);
-    padding: 36px;
-    box-shadow: var(--shadow-card);
-    display: grid;
-    grid-template-columns: 4fr 2fr;
-    gap: 40px;
-    align-items: center;
-  }
-
-  .news-tag {
-    display: inline-block;
-    background: var(--green-dark);
-    color: var(--gold);
-    font-size: 10px;
-    letter-spacing: 2px;
-    font-weight: 700;
-    text-transform: uppercase;
-    padding: 4px 12px;
-    border-radius: 2px;
-    margin-bottom: 16px;
-  }
-
-  .news-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--green-dark);
-    line-height: 1.3;
-    margin-bottom: 16px;
-  }
-
-  .news-body {
-    font-size: 14px;
-    line-height: 1.8;
-    color: var(--gray-800);
-  }
-
-  .news-impact {
-    background: var(--green-dark);
-    color: var(--white);
-    border-radius: var(--radius-lg);
-    padding: 28px;
-    text-align: center;
-  }
-
-  .news-impact-title {
-    font-size: 11px;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    color: var(--green-accent);
-    margin-bottom: 16px;
-  }
-
-  .news-impact-item {
-    font-size: 13px;
-    color: rgba(255,255,255,0.8);
-    padding: 8px 0;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
-    display: flex; align-items: center; gap: 8px;
-  }
-
-  .news-impact-item:last-child { border-bottom: none; }
-
-  /* ── ESTRATEGIA ── */
-  #estrategia { background: var(--green-dark); margin: 0; max-width: none; padding: 72px 64px; }
-
-  #estrategia .section-eyebrow { color: var(--gold); }
-  #estrategia .section-title   { color: var(--white); }
-  #estrategia .section-lead    { color: rgba(255,255,255,0.55); }
-  #estrategia .divider-line    { background: var(--gold); }
-
-  .strat-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: 20px;
-  }
-
-  .strat-card {
-    background: rgba(255,255,255,0.05);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: var(--radius-lg);
-    padding: 28px;
-    transition: background .25s;
-  }
-
-  .strat-card:hover { background: rgba(255,255,255,0.09); }
-
-  .strat-number {
-    font-family: 'Playfair Display', serif;
-    font-size: 42px;
-    font-weight: 900;
-    color: var(--gold);
-    opacity: .3;
-    line-height: 1;
-    margin-bottom: 8px;
-  }
-
-  .strat-title { font-weight: 700; font-size: 15px; color: var(--white); margin-bottom: 8px; }
-  .strat-text  { font-size: 13px; color: rgba(255,255,255,0.55); line-height: 1.7; }
-
-  .strat-coming {
-    text-align: center;
-    padding: 48px;
-    border: 1px dashed rgba(255,255,255,0.2);
-    border-radius: var(--radius-lg);
-    margin-top: 32px;
-  }
-
-  .strat-coming-label {
-    font-size: 11px;
-    letter-spacing: 3px;
-    text-transform: uppercase;
-    color: var(--gold);
-    margin-bottom: 12px;
-  }
-
-  .strat-coming-text {
-    font-size: 14px;
-    color: rgba(255,255,255,0.4);
-    max-width: 400px;
-    margin: 0 auto;
-    line-height: 1.7;
-  }
-
-  /* ── FOOTER ── */
-  footer {
-    background: #0e1f11;
-    padding: 40px 64px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 16px;
-  }
-
-  .footer-brand {
-    font-family: 'Playfair Display', serif;
-    font-size: 20px;
-    color: var(--white);
-    font-weight: 700;
-  }
-
-  .footer-brand span { color: var(--gold); }
-
-  .footer-info {
-    font-size: 12px;
-    color: rgba(255,255,255,0.35);
-    text-align: right;
-    line-height: 1.7;
-  }
-
-  /* ── UTILITIES ── */
-  .green { color: var(--green-mid); }
-  .gold  { color: var(--gold); }
-  .red   { color: var(--red-risk); }
-
-  /* ── MENU PAGE ── */
-  #menu-page {
-    background: var(--green-dark);
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 64px 32px;
-  }
-
-  .menu-title {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(24px, 4vw, 40px);
-    color: var(--white);
-    text-align: center;
-    margin-bottom: 8px;
-  }
-
-  .menu-sub {
-    font-size: 13px;
-    color: rgba(255,255,255,0.4);
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-align: center;
-    margin-bottom: 56px;
-  }
-
-  .menu-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-    max-width: 700px;
-    width: 100%;
-  }
-
-  .menu-item {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid rgba(255,255,255,0.1);
-    border-radius: var(--radius-lg);
-    padding: 32px 28px;
-    text-align: center;
-    cursor: pointer;
-    transition: background .25s, border-color .25s, transform .2s;
-    text-decoration: none;
-    display: block;
-  }
-
-  .menu-item:hover {
-    background: rgba(255,255,255,0.09);
-    border-color: var(--gold);
-    transform: translateY(-3px);
-  }
-
-  .menu-emoji { font-size: 36px; margin-bottom: 12px; }
-  .menu-item-title { font-weight: 700; font-size: 16px; color: var(--white); margin-bottom: 6px; }
-  .menu-item-sub   { font-size: 12px; color: rgba(255,255,255,0.4); line-height: 1.5; }
-
-  /* ── PAGES ── */
-  .page { display: none; }
-  .page.active { display: block; }
-
-  /* ── RESPONSIVE ── */
-  @media (max-width: 768px) {
-    nav { padding: 0 20px; }
-    .nav-links { gap: 16px; }
-    .nav-links a { font-size: 11px; }
-    section { padding: 56px 20px; }
-    #sobre, #riesgos, #estrategia { padding: 56px 24px; }
-    .sobre-grid { grid-template-columns: 1fr; gap: 40px; }
-    .news-card { grid-template-columns: 1fr; }
-    .menu-grid { grid-template-columns: 1fr; }
-    footer { padding: 32px 24px; }
-    .footer-info { text-align: left; }
-    .cover-stats { gap: 20px; }
-    .cover-stat-div { display: none; }
-  }
-
-  /* ── SCROLL ANIMATIONS ── */
-  .reveal {
-    opacity: 0;
-    transform: translateY(24px);
-    transition: opacity .7s ease, transform .7s ease;
-  }
-
-  .reveal.visible {
-    opacity: 1;
-    transform: none;
-  }
+:root{
+  --fd:#0B1A0E;--fm:#1E3526;--fa:#2E5A3A;--fs:#3E7A50;--fmist:rgba(62,122,80,.15);
+  --gold:#C8922A;--gold-l:#E5AE45;--gold-p:#F4E2B8;
+  --cream:#F6F2EB;--warm:#FEFCF8;--white:#fff;
+  --ink:#141414;--ink2:#404040;--ink3:#787878;--ink4:#AEAEAE;
+  --brd:#E2DDD5;--navy:#0F3460;--rr:#B83230;--ra:#C8922A;--rg:#2E7A3A;
+  --fd2:'Poppins','Helvetica Neue',sans-serif;
+  --fb:'Inter','Helvetica Neue',sans-serif;
+  --fm2:'DM Mono','Courier New',monospace;
+  --sh:0 2px 16px rgba(0,0,0,.07);--shlg:0 8px 48px rgba(0,0,0,.12);
+  --r:6px;--rl:14px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+p,.sp,.pp,.np,.slead,.rcp,.stp,.inote,.ftdesc,.tmat,.tphoto-hint,.aitem{font-family:var(--fb)}
+body{font-family:var(--fb);background:var(--cream);color:var(--ink);overflow-x:hidden;cursor:none}
+
+/* CURSOR */
+.cur-dot{width:8px;height:8px;background:var(--gold);border-radius:50%;position:fixed;transform:translate(-50%,-50%);pointer-events:none;z-index:9999;transition:width .2s,height .2s}
+.cur-ring{width:36px;height:36px;border:1.5px solid var(--gold);border-radius:50%;position:fixed;transform:translate(-50%,-50%);pointer-events:none;z-index:9998;transition:transform .08s linear,width .2s,height .2s}
+
+/* PROGRESS */
+#prog{position:fixed;top:0;left:0;height:2px;background:linear-gradient(90deg,var(--gold),var(--gold-l));z-index:1001;width:0;display:none;transition:width .1s}
+
+/* PAGES */
+.page{display:none}.page.active{display:block}
+
+/* ══ COVER ══ */
+#cover{min-height:100vh;background:var(--fd);display:flex;flex-direction:column;position:relative;overflow:hidden}
+.cbg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 20% 120%,rgba(46,90,58,.45) 0%,transparent 65%),radial-gradient(ellipse 40% 50% at 90% 10%,rgba(200,146,42,.1) 0%,transparent 55%);pointer-events:none}
+.cgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:80px 80px;pointer-events:none}
+
+.cnav{position:relative;z-index:2;display:flex;align-items:center;justify-content:space-between;padding:32px 56px;opacity:0;animation:fadeIn .8s .2s forwards}
+.clogo{font-family:var(--fd2);font-size:22px;font-weight:600;color:var(--white)}.clogo span{color:var(--gold)}
+.ctag{font-family:var(--fm2);font-size:11px;color:rgba(255,255,255,.35);letter-spacing:3px;text-transform:uppercase}
+
+.cbody{position:relative;z-index:2;flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 56px;max-width:1200px}
+.clabel{font-family:var(--fm2);font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:32px;opacity:0;animation:slideUp .8s .4s forwards}
+.ch1{font-size:clamp(48px,7.5vw,108px);font-weight:700;line-height:.95;color:var(--white);letter-spacing:-1.5px;margin-bottom:0;opacity:0;animation:slideUp .9s .55s forwards}
+.ch1 em{color:var(--gold-l);font-style:italic}
+.csub{font-size:clamp(16px,2vw,24px);font-weight:400;font-style:italic;color:rgba(255,255,255,.45);margin-top:24px;opacity:0;animation:slideUp .8s .7s forwards;max-width:680px;line-height:1.45}
+.ccta{margin-top:56px;opacity:0;animation:slideUp .8s .9s forwards;display:flex;gap:16px;flex-wrap:wrap}
+
+.btn-p{display:inline-flex;align-items:center;gap:12px;background:var(--gold);color:var(--fd);font-weight:700;font-size:14px;letter-spacing:.5px;padding:16px 36px;border:none;border-radius:2px;cursor:none;text-decoration:none;transition:background .2s,transform .2s}
+.btn-p:hover{background:var(--gold-l);transform:translateY(-2px)}
+.btn-p svg{width:16px;height:16px;flex-shrink:0}
+.btn-s{display:inline-flex;align-items:center;gap:10px;background:transparent;color:rgba(255,255,255,.6);font-weight:500;font-size:14px;letter-spacing:.5px;padding:16px 28px;border:1px solid rgba(255,255,255,.2);border-radius:2px;cursor:none;text-decoration:none;transition:all .2s}
+.btn-s:hover{border-color:var(--gold);color:var(--gold)}
+
+.cticker{position:relative;z-index:2;display:flex;align-items:center;gap:32px;padding:28px 56px;border-top:1px solid rgba(255,255,255,.08);margin-top:auto;flex-wrap:wrap;opacity:0;animation:fadeIn 1s 1.2s forwards}
+.tki{text-align:left}.tkv{font-size:28px;font-weight:600;color:var(--gold-l);line-height:1}
+.tkl{font-family:var(--fm2);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:5px}
+.tkd{width:1px;height:40px;background:rgba(255,255,255,.1);align-self:center}
+
+/* Ticker animation */
+.ticker-live{display:inline-block;width:6px;height:6px;background:#4CAF50;border-radius:50%;margin-right:4px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.8)}}
+
+@keyframes slideUp{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* ══ NAV ══ */
+nav{position:sticky;top:0;z-index:100;height:68px;display:flex;align-items:center;justify-content:space-between;padding:0 56px;background:var(--fd);border-bottom:1px solid rgba(255,255,255,.07);transition:box-shadow .3s}
+nav.scrolled{box-shadow:0 4px 32px rgba(0,0,0,.3)}
+.nbrand{font-size:20px;font-weight:600;color:var(--white);text-decoration:none;display:flex;align-items:center;gap:8px;cursor:none}
+.nbrand .dot{width:6px;height:6px;background:var(--gold);border-radius:50%}
+.nlinks{display:flex;align-items:center;gap:4px;list-style:none}
+.nlinks a{font-size:12px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,.5);text-decoration:none;padding:8px 14px;border-radius:var(--r);transition:color .2s,background .2s;cursor:none}
+.nlinks a:hover{color:var(--white);background:rgba(255,255,255,.06)}
+.nlinks a.active{color:var(--gold)}
+
+/* ══ SECTIONS ══ */
+.section{padding:96px 56px}.si{max-width:1280px;margin:0 auto}
+.eyebrow{font-family:var(--fm2);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--fs);margin-bottom:16px}
+.eyebrow-l{color:var(--gold)}
+.sh{font-size:clamp(36px,4.5vw,60px);font-weight:600;line-height:1.05;letter-spacing:-.5px;color:var(--ink);margin-bottom:20px}
+.sh em{font-style:italic;color:var(--fa)}
+.shl{color:var(--white)}.shl em{color:var(--gold-l)}
+.slead{font-size:16px;line-height:1.75;color:var(--ink3);max-width:580px}
+.gbar{width:48px;height:3px;background:var(--gold);margin-bottom:40px}
+
+/* REVEAL */
+.rev{opacity:0;transform:translateY(20px);transition:opacity .65s ease,transform .65s ease}
+.rev.on{opacity:1;transform:none}
+.rev-l{opacity:0;transform:translateX(-24px);transition:opacity .65s ease,transform .65s ease}.rev-l.on{opacity:1;transform:none}
+.rev-r{opacity:0;transform:translateX(24px);transition:opacity .65s ease,transform .65s ease}.rev-r.on{opacity:1;transform:none}
+
+/* ══ SOBRE ══ */
+#sobre{background:var(--warm);padding:0;overflow:hidden}
+.swrap{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:320px 1fr;min-height:620px}
+.ssidebar{background:var(--fd);padding:72px 44px;display:flex;flex-direction:column;position:relative;overflow:hidden}
+.ssidebar::before{content:'';position:absolute;bottom:0;right:0;width:200px;height:200px;background:radial-gradient(circle,rgba(200,146,42,.12),transparent 70%);pointer-events:none}
+.ssidebar .eyebrow{color:var(--gold);margin-bottom:40px}
+.kpi-list{display:flex;flex-direction:column;gap:24px;margin-top:auto;padding-top:40px}
+.kpi{border-top:1px solid rgba(255,255,255,.08);padding-top:20px}
+.kpiv{font-size:32px;font-weight:600;color:var(--gold-l);line-height:1}
+.kpil{font-family:var(--fm2);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.3);margin-top:6px}
+.scontent{padding:64px;display:flex;flex-direction:column;justify-content:center}
+.sp{font-size:15px;line-height:1.8;color:var(--ink2);margin-bottom:16px;max-width:560px}
+.sp strong{color:var(--ink);font-weight:600}
+
+.timeline{margin-top:48px;position:relative;padding-left:28px}
+.timeline::before{content:'';position:absolute;left:6px;top:8px;bottom:0;width:1.5px;background:linear-gradient(to bottom,var(--fs) 0%,var(--gold) 100%)}
+.tl{margin-bottom:28px;position:relative}
+.tl::before{content:'';position:absolute;left:-26px;top:6px;width:10px;height:10px;background:var(--fs);border-radius:50%;border:2px solid var(--warm);box-shadow:0 0 0 2px var(--fs)}
+.tl-gold::before{background:var(--gold);box-shadow:0 0 0 2px var(--gold)}
+.tlyr{font-family:var(--fm2);font-size:11px;color:var(--gold);letter-spacing:1px;margin-bottom:5px}
+.tlt{font-size:13px;line-height:1.65;color:var(--ink2)}.tlt strong{color:var(--ink)}
+
+/* ══ MACRO ══ */
+#macro{background:var(--cream)}
+.mtop{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-bottom:56px;flex-wrap:wrap}
+.fxbadge{background:var(--fd);border-radius:var(--rl);padding:24px 36px;text-align:center}
+.fxrate{font-size:44px;font-weight:700;color:var(--gold-l);line-height:1}
+.fxlbl{font-family:var(--fm2);font-size:10px;letter-spacing:3px;text-transform:uppercase;color:rgba(255,255,255,.35);margin-top:8px}
+.fxsrc{font-size:11px;color:rgba(255,255,255,.2);margin-top:4px}
+
+.igrid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.icard{background:var(--white);border-radius:var(--rl);border:1px solid var(--brd);overflow:hidden;transition:transform .25s,box-shadow .25s;position:relative}
+.icard:hover{transform:translateY(-4px);box-shadow:var(--shlg)}
+.icard::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--fa),var(--fs))}
+.ihead{padding:20px 24px 14px;border-bottom:1px solid var(--brd);display:flex;align-items:center;gap:14px}
+.iico{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.iname{font-weight:600;font-size:14px;color:var(--ink)}
+.isub{font-size:11px;color:var(--ink3);margin-top:3px}
+.ibody{padding:18px 24px}
+.irow{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--brd)}
+.irow:last-of-type{border-bottom:none}
+.icty{font-family:var(--fm2);font-size:11px;font-weight:500;letter-spacing:.5px;text-transform:uppercase;color:var(--ink3)}
+.ival{font-size:22px;font-weight:700}
+.vr{color:var(--rr)}.vg{color:var(--rg)}.vn{color:var(--gold)}.vb{color:var(--navy)}.vd{color:var(--ink)}
+.pill{display:inline-flex;align-items:center;gap:4px;font-family:var(--fm2);font-size:10px;font-weight:500;letter-spacing:.5px;padding:3px 10px;border-radius:20px;text-transform:uppercase}
+.pup{background:#E8F4E9;color:#2D7A3A}.pdn{background:#FDEDEC;color:#B83230}.pneu{background:#FEF9EC;color:#9A6E10}
+.inote{background:var(--cream);border-radius:var(--r);padding:11px 14px;font-size:12px;line-height:1.6;color:var(--ink2);margin-top:12px;border-left:3px solid var(--fs)}
+.iimp{display:flex;align-items:center;gap:8px;padding:8px 0;font-size:12px;color:var(--ink3)}
+
+/* CHARTS */
+.chart-section{margin-top:56px}
+.charts-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:0}
+.chart-box{background:var(--white);border-radius:var(--rl);border:1px solid var(--brd);padding:32px}
+.chart-box.full{grid-column:span 2}
+.chrt-h{font-size:17px;font-weight:600;color:var(--ink);margin-bottom:4px}
+.chrt-src{font-size:11px;color:var(--ink4);margin-bottom:20px}
+.chart-wrap{position:relative;height:260px}
+.chart-wrap-lg{position:relative;height:220px}
+
+/* TAB SWITCHER */
+.tabs{display:flex;gap:8px;margin-bottom:24px}
+.tab{padding:8px 18px;border-radius:20px;font-size:12px;font-weight:600;letter-spacing:.5px;cursor:none;border:1px solid var(--brd);background:transparent;color:var(--ink3);transition:all .2s}
+.tab.active{background:var(--fd);color:var(--gold);border-color:var(--fd)}
+
+/* POLICIES */
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:20px;margin-top:24px}
+.pcard{background:var(--white);border-radius:var(--rl);border:1px solid var(--brd);padding:32px;border-top:3px solid var(--fs)}
+.pcard.gt{border-top-color:var(--gold)}
+.ptag{font-family:var(--fm2);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--fs);margin-bottom:12px}
+.ptag-g{color:var(--gold)}
+.ph{font-size:19px;font-weight:600;color:var(--ink);margin-bottom:14px}
+.pp{font-size:13px;line-height:1.75;color:var(--ink2)}.pp strong{color:var(--ink)}
+
+/* ══ NOTICIAS ══ */
+#noticias{background:var(--fd);padding:96px 56px;position:relative;overflow:hidden}
+.ninner{max-width:1280px;margin:0 auto}
+.ncard{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--rl);padding:48px;display:grid;grid-template-columns:1fr 300px;gap:56px;align-items:center}
+.ntag{display:inline-block;background:var(--gold);color:var(--fd);font-family:var(--fm2);font-size:10px;letter-spacing:2px;font-weight:500;text-transform:uppercase;padding:5px 14px;border-radius:2px;margin-bottom:20px}
+.nh{font-size:clamp(20px,2.5vw,30px);font-weight:600;color:var(--white);line-height:1.25;margin-bottom:18px;letter-spacing:-.5px}
+.np{font-size:14px;line-height:1.8;color:rgba(255,255,255,.55)}.np strong{color:rgba(255,255,255,.85)}
+.naside{background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.07);border-radius:var(--rl);padding:28px}
+.albl{font-family:var(--fm2);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--gold);margin-bottom:20px}
+.aitem{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);font-size:13px;color:rgba(255,255,255,.65);line-height:1.5}
+.aitem:last-child{border-bottom:none}
+.adot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.dg{background:#4CAF50}.dr{background:#F44336}.da{background:var(--gold)}
+
+/* ══ RIESGOS ══ */
+#riesgos{background:var(--warm)}
+/* Risk matrix visual */
+.risk-matrix{background:var(--white);border-radius:var(--rl);border:1px solid var(--brd);padding:32px;margin-bottom:32px;overflow:hidden}
+.matrix-title{font-size:17px;font-weight:600;color:var(--ink);margin-bottom:20px}
+.matrix-grid{display:grid;grid-template-columns:48px 1fr 1fr 1fr;grid-template-rows:auto 80px 80px 80px;gap:4px;align-items:center}
+.mx-axis{font-family:var(--fm2);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--ink4);writing-mode:vertical-rl;transform:rotate(180deg);text-align:center}
+.mx-lbl{font-family:var(--fm2);font-size:10px;color:var(--ink4);text-align:center;padding:4px}
+.mx-cell{border-radius:8px;display:flex;align-items:center;justify-content:center;cursor:default;transition:transform .2s}
+.mx-cell:hover{transform:scale(1.04)}
+.mx-lo{background:#E8F4E9;color:#2D7A3A;font-size:11px;font-weight:600;text-align:center;padding:6px}
+.mx-me{background:#FEF9EC;color:#9A6E10;font-size:11px;font-weight:600;text-align:center;padding:6px}
+.mx-hi{background:#FDEDEC;color:#B83230;font-size:11px;font-weight:600;text-align:center;padding:6px}
+
+.rgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:0}
+.rcard{background:var(--white);border-radius:var(--rl);padding:26px;border:1px solid var(--brd);position:relative;overflow:hidden;transition:transform .22s,box-shadow .22s}
+.rcard:hover{transform:translateY(-3px);box-shadow:var(--shlg)}
+.rcacc{position:absolute;top:0;left:0;bottom:0;width:3px}
+.rc-r{background:var(--rr)}.rc-a{background:var(--ra)}.rc-g{background:var(--rg)}
+.rci{font-size:24px;margin-bottom:10px}
+.rct{font-weight:600;font-size:14px;color:var(--ink);margin-bottom:8px;line-height:1.3}
+.rcp{font-size:12px;line-height:1.65;color:var(--ink3)}
+.rcl{display:inline-block;margin-top:12px;font-family:var(--fm2);font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase;padding:3px 10px;border-radius:20px}
+.lh{background:#FDEDEC;color:var(--rr)}.lm{background:#FEF9EC;color:#9A6E10}.lg{background:#E8F4E9;color:var(--rg)}
+
+/* ══ EQUIPO ══ */
+#equipo{background:var(--cream);padding:96px 56px}
+.teqgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;margin-top:56px}
+.tcard{background:var(--white);border-radius:var(--rl);border:1px solid var(--brd);overflow:hidden;transition:transform .25s,box-shadow .25s;text-align:center}
+.tcard:hover{transform:translateY(-4px);box-shadow:var(--shlg)}
+.tphoto{width:100%;height:220px;object-fit:cover;display:block;background:linear-gradient(135deg,var(--fm) 0%,var(--fs) 100%)}
+.tphoto-placeholder{width:100%;height:220px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--fd) 0%,var(--fm) 100%);position:relative;overflow:hidden}
+.tphoto-placeholder::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:30px 30px}
+.tphoto-icon{width:72px;height:72px;border-radius:50%;background:rgba(255,255,255,.08);border:2px solid rgba(200,146,42,.4);display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
+.tphoto-icon svg{width:36px;height:36px;fill:rgba(200,146,42,.7)}
+.tphoto-hint{font-family:var(--fm2);font-size:10px;color:rgba(255,255,255,.25);letter-spacing:2px;text-transform:uppercase;margin-top:12px;position:relative;z-index:1}
+
+/* Upload button */
+.tphoto-upload{position:absolute;bottom:12px;right:12px;z-index:2;background:var(--gold);color:var(--fd);font-size:11px;font-weight:700;border:none;border-radius:4px;padding:6px 12px;cursor:none;letter-spacing:.5px;opacity:0;transition:opacity .2s}
+.tcard:hover .tphoto-upload{opacity:1}
+
+.tbody{padding:20px 24px 24px}
+.tname{font-size:16px;font-weight:700;color:var(--ink);margin-bottom:4px}
+.trole{font-family:var(--fm2);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--fs);margin-bottom:8px}
+.tmat{font-size:12px;color:var(--ink3);line-height:1.5}
+.tbadge{display:inline-block;margin-top:10px;background:var(--cream);border:1px solid var(--brd);border-radius:20px;padding:3px 12px;font-size:11px;color:var(--ink3)}
+
+/* Hidden file input */
+.file-input{display:none}
+
+/* ══ ESTRATEGIA ══ */
+#estrategia{background:var(--fd);padding:96px 56px;position:relative;overflow:hidden}
+#estrategia::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;background:radial-gradient(circle,rgba(200,146,42,.06),transparent 65%);pointer-events:none}
+.stinner{max-width:1280px;margin:0 auto}
+.stgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:56px}
+.stcard{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:var(--rl);padding:28px;transition:background .25s,border-color .25s}
+.stcard:hover{background:rgba(255,255,255,.07);border-color:rgba(200,146,42,.3)}
+.stn{font-size:48px;font-weight:700;color:var(--gold);opacity:.2;line-height:1;margin-bottom:12px}
+.stt{font-weight:600;font-size:15px;color:var(--white);margin-bottom:10px}
+.stp{font-size:13px;color:rgba(255,255,255,.45);line-height:1.7}
+.stcoming{border:1px dashed rgba(255,255,255,.15);border-radius:var(--rl);padding:48px;text-align:center;margin-top:24px}
+.sclbl{font-family:var(--fm2);font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);margin-bottom:14px}
+.scp{font-size:14px;color:rgba(255,255,255,.3);max-width:420px;margin:0 auto;line-height:1.7}
+
+/* ══ FOOTER ══ */
+footer{background:#070F09;padding:56px;border-top:1px solid rgba(255,255,255,.05)}
+.ftinner{max-width:1280px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr 1fr;gap:56px;align-items:start}
+.ftbrand{font-size:22px;font-weight:600;color:var(--white)}.ftbrand span{color:var(--gold)}
+.ftdesc{font-size:13px;color:rgba(255,255,255,.3);margin-top:8px;line-height:1.7;max-width:240px}
+.fth{font-family:var(--fm2);font-size:10px;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,.25);margin-bottom:16px}
+.ftlist{list-style:none;display:flex;flex-direction:column;gap:10px}
+.ftlist a{font-size:13px;color:rgba(255,255,255,.4);text-decoration:none;transition:color .2s}
+.ftlist a:hover{color:var(--gold)}
+.ftcopy{border-top:1px solid rgba(255,255,255,.05);padding-top:32px;margin-top:48px;max-width:1280px;margin-left:auto;margin-right:auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.ftct{font-size:12px;color:rgba(255,255,255,.2)}
+.ftsr{font-size:11px;color:rgba(255,255,255,.15);text-align:right;line-height:1.7}
+
+/* TOOLTIP */
+.tooltip{position:absolute;background:var(--fd);color:var(--white);font-size:12px;padding:8px 14px;border-radius:var(--r);pointer-events:none;opacity:0;transition:opacity .2s;z-index:50;white-space:nowrap;border:1px solid rgba(255,255,255,.1)}
+
+/* RESPONSIVE */
+@media(max-width:960px){
+  .cnav,.cbody,.cticker{padding-left:24px;padding-right:24px}
+  nav{padding:0 24px}
+  .section{padding:64px 24px}
+  .swrap{grid-template-columns:1fr}
+  .ssidebar{padding:48px 24px}
+  .scontent{padding:48px 24px}
+  .igrid{grid-template-columns:1fr}
+  .charts-grid{grid-template-columns:1fr}
+  .chart-box.full{grid-column:span 1}
+  .ncard{grid-template-columns:1fr}
+  .rgrid{grid-template-columns:1fr 1fr}
+  .teqgrid{grid-template-columns:1fr 1fr}
+  .stgrid{grid-template-columns:1fr 1fr}
+  .ftinner{grid-template-columns:1fr;gap:32px}
+  .pgrid{grid-template-columns:1fr}
+  #estrategia{padding:64px 24px}
+  #equipo{padding:64px 24px}
+  footer{padding:40px 24px}
+}
+@media(max-width:600px){
+  .rgrid{grid-template-columns:1fr}
+  .teqgrid{grid-template-columns:1fr}
+  .stgrid{grid-template-columns:1fr}
+  #noticias{padding:64px 24px}
+  .ncard{padding:28px;gap:28px}
+}
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════
-     PAGE 0 — COVER
-═══════════════════════════════════════════ -->
+<div id="dot" class="cur-dot"></div>
+<div id="ring" class="cur-ring"></div>
+<div id="prog"></div>
+
+<!-- ══════════════ COVER ══════════════ -->
 <div id="page-cover" class="page active">
-  <div id="cover">
-    <div class="cover-lines"></div>
-    <div class="cover-content">
-      <p class="cover-eyebrow">Administración Financiera Internacional · Actividad 2</p>
+<div id="cover">
+  <div class="cbg"></div><div class="cgrid"></div>
 
-      <div class="cover-logo-box">
-        <div class="logo-icon">
-          <svg viewBox="0 0 32 32"><path d="M16 2 L28 8 L28 20 C28 26 22 30 16 30 C10 30 4 26 4 20 L4 8 Z"/></svg>
-        </div>
-        <div>
-          <div class="logo-text">ARAUCO</div>
-          <div class="logo-sub">México · Análisis Macroeconómico</div>
-        </div>
-      </div>
+  <div style="position:absolute;inset:0;opacity:.3;background-image:url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'300\' height=\'300\'%3E%3Cfilter id=\'n\'%3E%3CfeTurbulence type=\'fractalNoise\' baseFrequency=\'.9\' numOctaves=\'4\' stitchTiles=\'stitch\'/%3E%3C/filter%3E%3Crect width=\'100%25\' height=\'100%25\' filter=\'url(%23n)\' opacity=\'.06\'/%3E%3C/svg%3E');pointer-events:none"></div>
+  <div class="cnav">
+    <div><div class="clogo">ARAUCO <span>MX</span></div><div class="ctag">Cedrus Advisory · AFI 2026</div></div>
+    <div class="ctag">Tecnológico de Monterrey</div>
+  </div>
 
-      <h1 class="cover-title">Entorno Económico<br/><span>USD / MXN · 2026</span></h1>
-      <p class="cover-desc">Análisis integral de los indicadores macroeconómicos que impactan las operaciones de ARAUCO en México, con énfasis en el tipo de cambio y la estrategia de cobertura.</p>
-
-      <div class="cover-stats">
-        <div class="cover-stat">
-          <div class="cover-stat-val">$300M</div>
-          <div class="cover-stat-lbl">Inversión Vikingo 2.0</div>
-        </div>
-        <div class="cover-stat-div"></div>
-        <div class="cover-stat">
-          <div class="cover-stat-val">17.35</div>
-          <div class="cover-stat-lbl">USD/MXN Mayo 2026</div>
-        </div>
-        <div class="cover-stat-div"></div>
-        <div class="cover-stat">
-          <div class="cover-stat-val">300K m³</div>
-          <div class="cover-stat-lbl">Capacidad MDF Zitácuaro</div>
-        </div>
-        <div class="cover-stat-div"></div>
-        <div class="cover-stat">
-          <div class="cover-stat-val">4.45%</div>
-          <div class="cover-stat-lbl">Inflación México Abr 2026</div>
-        </div>
-      </div>
-
-      <a href="#" class="btn-enter" onclick="goToMenu(); return false;">
+  <div class="cbody">
+    <div class="clabel">Administración Financiera Internacional — Actividad 2</div>
+    <h1 class="ch1">Análisis<br/><em>Macroeconómico</em></h1>
+    <p class="csub">Cinco indicadores bilaterales que moldean el tipo de cambio USD/MXN y los márgenes de Arauco en México — datos oficiales mayo 2026.</p>
+    <div class="ccta">
+      <a href="#" class="btn-p" onclick="goMain();return false;">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        Entrar al sitio
+        Explorar el análisis
+      </a>
+      <a href="#" class="btn-s" onclick="goTeam();return false;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Nuestro equipo
       </a>
     </div>
+  </div>
 
-    <div class="cover-scroll">
-      <span>Scroll</span>
-      <svg width="14" height="20" viewBox="0 0 14 20" fill="none">
-        <rect x="1" y="1" width="12" height="18" rx="6" stroke="rgba(255,255,255,0.3)" stroke-width="1.5"/>
-        <circle cx="7" cy="6" r="2" fill="rgba(255,255,255,0.4)"/>
-      </svg>
+  <div class="cticker">
+    <div class="tki"><div class="tkv"><span class="ticker-live"></span>17.22</div><div class="tkl">USD / MXN · mayo 2026</div></div>
+    <div class="tkd"></div>
+    <div class="tki"><div class="tkv">4.45%</div><div class="tkl">Inflación México · abr</div></div>
+    <div class="tkd"></div>
+    <div class="tki"><div class="tkv">6.50%</div><div class="tkl">Tasa Banxico · mayo</div></div>
+    <div class="tkd"></div>
+    <div class="tki"><div class="tkv">−0.8%</div><div class="tkl">PIB México Q1 · trim.</div></div>
+    <div class="tkd"></div>
+    <div class="tki"><div class="tkv">$300M</div><div class="tkl">Proyecto Vikingo 2.0</div></div>
+  </div>
+</div>
+</div>
+
+<!-- ══════════════ PAGE MAIN ══════════════ -->
+<div id="page-main" class="page">
+
+<nav id="mainnav">
+  <a href="#" class="nbrand" onclick="goCover();return false;">ARAUCO <div class="dot"></div> <span style="color:rgba(255,255,255,.4);font-size:16px;font-weight:300">MX</span></a>
+  <ul class="nlinks">
+    <li><a href="#sobre" class="active">Empresa</a></li>
+    <li><a href="#macro">Indicadores</a></li>
+    <li><a href="#noticias">Noticias</a></li>
+    <li><a href="#riesgos">Riesgos</a></li>
+    <li><a href="#estrategia">Cobertura</a></li>
+    <li><a href="#equipo">Equipo</a></li>
+  </ul>
+</nav>
+
+<!-- ─── SOBRE ─── -->
+<section id="sobre" style="padding:0">
+  <div class="swrap">
+    <div class="ssidebar rev-l">
+      <div class="eyebrow eyebrow-l">Perfil de la empresa</div>
+      <div style="font-size:34px;font-weight:600;color:var(--white);line-height:1.1">Celulosa<br/><em style="color:var(--gold-l);font-style:italic">Arauco</em></div>
+      <div style="font-family:var(--fm2);font-size:11px;color:rgba(255,255,255,.3);letter-spacing:2px;text-transform:uppercase;margin-top:4px">Chile · Est. 1979</div>
+      <div class="kpi-list">
+        <div class="kpi"><div class="kpiv" data-count="6.55" data-prefix="USD $" data-suffix="B">—</div><div class="kpil">Ventas globales 2024</div></div>
+        <div class="kpi"><div class="kpiv" data-count="19000" data-prefix="" data-suffix="+">—</div><div class="kpil">Empleados en el mundo</div></div>
+        <div class="kpi"><div class="kpiv" data-count="300" data-prefix="USD $" data-suffix="M">—</div><div class="kpil">Inversión Vikingo 2.0 MX</div></div>
+        <div class="kpi"><div class="kpiv" data-count="7" data-prefix="" data-suffix=" países">—</div><div class="kpil">Presencia industrial</div></div>
+      </div>
+    </div>
+    <div class="scontent rev-r">
+      <div class="eyebrow" style="margin-bottom:8px">Arauco en México</div>
+      <div class="gbar"></div>
+      <h2 class="sh" style="font-size:clamp(26px,3vw,42px)">Integración vertical <em>en el mercado mexicano</em></h2>
+      <p class="sp">Celulosa Arauco y Constitución S.A. es parte del Grupo Empresas Copec (Grupo Angelini). Opera tableros MDF, aglomerado y resinas industriales en México desde 2018, cuando adquirió activos de Masisa por <strong>USD $245 millones</strong>.</p>
+      <p class="sp">Su apuesta central es el <strong>Proyecto Vikingo 2.0</strong> en Zitácuaro, Michoacán: 300,000 m³ anuales de MDF con tecnología alemana e italiana de circuito cerrado, cubriendo hasta el <strong>60% del consumo nacional</strong> al iniciar operaciones en 2026.</p>
+      <div class="timeline">
+        <div class="tl"><div class="tlyr">1979</div><div class="tlt">Fundación en Chile mediante fusión de empresas forestales privatizadas.</div></div>
+        <div class="tl"><div class="tlyr">2018</div><div class="tlt">Adquisición de activos Masisa México por <strong>USD $245M</strong>: tres complejos en Chihuahua, Durango y Zitácuaro.</div></div>
+        <div class="tl"><div class="tlyr">Sep 2022</div><div class="tlt">Directorio aprueba USD $235M para nueva línea MDF — Proyecto Vikingo 2.0.</div></div>
+        <div class="tl tl-gold"><div class="tlyr">2025–2026</div><div class="tlt">Inversión escala a <strong>USD $300M</strong>. Obra al 90%. Inicio operaciones 2026 con 250–300 empleos permanentes.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── MACRO ─── -->
+<section id="macro" class="section">
+  <div class="si">
+    <div class="mtop rev">
+      <div>
+        <div class="eyebrow">Variables Macroeconómicas</div>
+        <div class="gbar"></div>
+        <h2 class="sh">5 Indicadores clave<br/><em>México vs. EE.UU. · 2026</em></h2>
+        <p class="slead">Análisis bilateral con énfasis en el impacto sobre el tipo de cambio USD/MXN y la estructura de costos de Arauco México. Fuentes oficiales mayo 2026.</p>
+      </div>
+      <div class="fxbadge">
+        <div class="fxrate">17.22</div>
+        <div class="fxlbl">USD / MXN</div>
+        <div class="fxsrc">Mayo 2026 · Banxico FIX</div>
+      </div>
+    </div>
+
+    <div class="igrid">
+      <div class="icard rev">
+        <div class="ihead"><div class="iico" style="background:#E8F5E9">📈</div><div><div class="iname">Inflación General</div><div class="isub">INPC · CPI — abril 2026</div></div></div>
+        <div class="ibody">
+          <div class="irow"><span class="icty">🇲🇽 México</span><span class="ival vr">4.45%</span></div>
+          <div class="irow"><span class="icty">🇺🇸 EE.UU.</span><span class="ival vn">3.80%</span></div>
+          <div class="iimp"><span class="icty">Diferencial</span><span class="pill pneu">+0.65 pp</span></div>
+          <div class="iimp"><span class="icty">USD/MXN</span><span class="pill pneu">Presión moderada</span></div>
+          <div class="inote">La inflación energética en EE.UU. (+17.9% anual) encarece urea, metanol y melamina importados por Arauco. Fuente: INEGI Bol. 277/26 · BLS USDL-26-0721.</div>
+        </div>
+      </div>
+
+      <div class="icard rev">
+        <div class="ihead"><div class="iico" style="background:#E3F2FD">🏦</div><div><div class="iname">Tasa de Interés de Referencia</div><div class="isub">Banxico · Fed — mayo 2026</div></div></div>
+        <div class="ibody">
+          <div class="irow"><span class="icty">🇲🇽 Banxico · 7 mayo</span><span class="ival vg">6.50%</span></div>
+          <div class="irow"><span class="icty">🇺🇸 Fed · 29 abril</span><span class="ival vb">3.50–3.75%</span></div>
+          <div class="iimp"><span class="icty">Diferencial</span><span class="pill pup">~2.85 pp ↑ MXN</span></div>
+          <div class="iimp"><span class="icty">USD/MXN</span><span class="pill pup">Fortalece el peso</span></div>
+          <div class="inote">Banxico cerró su ciclo (−450 pb desde 11.25%). Diferencial de 2.85 pp sostiene carry trade. Fuente: Banxico · Federal Reserve.</div>
+        </div>
+      </div>
+
+      <div class="icard rev">
+        <div class="ihead"><div class="iico" style="background:#FFF3E0">📊</div><div><div class="iname">Crecimiento del PIB</div><div class="isub">Variación real — Q1 2026</div></div></div>
+        <div class="ibody">
+          <div class="irow"><span class="icty">🇲🇽 México — anual</span><span class="ival vr">+0.2%</span></div>
+          <div class="irow"><span class="icty">🇺🇸 EE.UU.</span><span class="ival vg">+2.0%</span></div>
+          <div class="iimp"><span class="icty">Trim. MX</span><span class="pill pdn">−0.8% Q1 2026</span></div>
+          <div class="iimp"><span class="icty">USD/MXN</span><span class="pill pdn">Presiona deprec.</span></div>
+          <div class="inote">Primera contracción trimestral desde 2024. Manufactura −1.1%, construcción afectada directamente. Proyección anual 2026: 1.0–1.2%. Fuente: INEGI 30-abr-26.</div>
+        </div>
+      </div>
+
+      <div class="icard rev">
+        <div class="ihead"><div class="iico" style="background:#FCE4EC">👷</div><div><div class="iname">Tasa de Desempleo</div><div class="isub">ENOE · BLS — abril 2026</div></div></div>
+        <div class="ibody">
+          <div class="irow"><span class="icty">🇲🇽 México — ENOE mar.</span><span class="ival vg">2.4%</span></div>
+          <div class="irow"><span class="icty">🇺🇸 EE.UU. — abr.</span><span class="ival vn">4.3%</span></div>
+          <div class="iimp"><span class="icty">Tend. MX ajustada</span><span class="pill pneu">2.8% estacional</span></div>
+          <div class="iimp"><span class="icty">USD/MXN</span><span class="pill pneu">Efecto mixto</span></div>
+          <div class="inote">MX perdió 227,155 empleos formales Q1 2026. EE.UU. creó 115,000 nóminas en abril. Fuente: INEGI ENOE · BLS mayo-26.</div>
+        </div>
+      </div>
+
+      <div class="icard rev" style="grid-column:span 2; position:relative">
+        <div class="ihead"><div class="iico" style="background:#E8F5E9">💱</div><div><div class="iname">Tipo de Cambio USD / MXN</div><div class="isub">Régimen flotante · Banxico FIX — mayo 2026</div></div></div>
+        <div class="ibody" style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+          <div>
+            <div class="irow"><span class="icty">Spot semana 12–16 mayo</span><span class="ival vd" style="font-size:26px">17.09–17.38</span></div>
+            <div class="irow"><span class="icty">Rango 52 semanas</span><span class="ival vd" style="font-size:18px">17.08 – 19.57</span></div>
+            <div class="iimp"><span class="icty">Apreciación 12 m.</span><span class="pill pup">~11.67% peso</span></div>
+            <div class="iimp"><span class="icty">Proyección dic. 2026</span><span class="pill pneu">$18.00–$20.50</span></div>
+          </div>
+          <div class="inote" style="height:fit-content;align-self:center">
+            El peso se ha apreciado ~11.67% vs. el máximo de 19.57 (sep 2024), favorecido por el carry trade (+2.85 pp), las remesas récord y el nearshoring. El rango proyectado $18–$20.50 para dic 2026 implica riesgo de depreciación de hasta 19% desde niveles actuales, lo que exige cobertura activa.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── CHARTS SECTION ─── -->
+    <div class="chart-section rev">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:24px">
+        <div>
+          <div class="eyebrow" style="margin-bottom:4px">Visualización de datos</div>
+          <div style="font-size:22px;font-weight:600;color:var(--ink)">Gráficas comparativas</div>
+        </div>
+        <div class="tabs">
+          <button class="tab active" onclick="switchTab('comparativo')">Comparativo</button>
+          <button class="tab" onclick="switchTab('usdmxn')">USD/MXN histórico</button>
+          <button class="tab" onclick="switchTab('radar')">Radar de riesgo</button>
+        </div>
+      </div>
+
+      <!-- TAB 1: Comparativo -->
+      <div id="tab-comparativo" class="charts-grid">
+        <div class="chart-box">
+          <div class="chrt-h">Tasas de interés de referencia</div>
+          <div class="chrt-src">Banxico · Federal Reserve · mayo 2026</div>
+          <div class="chart-wrap"><canvas id="chartTasas"></canvas></div>
+        </div>
+        <div class="chart-box">
+          <div class="chrt-h">Inflación comparada (anual)</div>
+          <div class="chrt-src">INEGI · BLS · abril 2026</div>
+          <div class="chart-wrap"><canvas id="chartInflacion"></canvas></div>
+        </div>
+        <div class="chart-box full">
+          <div class="chrt-h">Indicadores macroeconómicos — México vs. EE.UU.</div>
+          <div class="chrt-src">Fuentes oficiales · mayo 2026 — Escala relativa ilustrativa</div>
+          <div class="chart-wrap-lg"><canvas id="chartComp"></canvas></div>
+        </div>
+      </div>
+
+      <!-- TAB 2: USD/MXN -->
+      <div id="tab-usdmxn" class="charts-grid" style="display:none">
+        <div class="chart-box full">
+          <div class="chrt-h">Evolución del tipo de cambio USD/MXN</div>
+          <div class="chrt-src">Banxico FIX · 2023–mayo 2026 (datos referenciales mensuales)</div>
+          <div class="chart-wrap-lg" style="height:300px"><canvas id="chartFX"></canvas></div>
+        </div>
+      </div>
+
+      <!-- TAB 3: RADAR -->
+      <div id="tab-radar" class="charts-grid" style="display:none">
+        <div class="chart-box">
+          <div class="chrt-h">Radar de riesgo — Arauco México</div>
+          <div class="chrt-src">Evaluación interna Cedrus Advisory · mayo 2026 (escala 0–10)</div>
+          <div class="chart-wrap"><canvas id="chartRadar"></canvas></div>
+        </div>
+        <div class="chart-box">
+          <div class="chrt-h">Exposición por categoría de riesgo</div>
+          <div class="chrt-src">Análisis cualitativo ponderado · Cedrus Advisory 2026</div>
+          <div class="chart-wrap"><canvas id="chartDona"></canvas></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- POLICIES -->
+    <div class="pgrid rev">
+      <div class="pcard">
+        <div class="ptag">Política Monetaria</div>
+        <div class="ph">Banxico & Fed — 2026</div>
+        <p class="pp">Banxico cerró su ciclo el <strong>7 de mayo de 2026</strong> con la tasa en <strong>6.50%</strong> (−450 pb desde el máximo de 11.25%). La Fed mantiene <strong>3.50–3.75%</strong> en su tercera pausa consecutiva. El diferencial de ~2.85 pp sostiene flujos de carry trade que apoyan al peso.</p>
+      </div>
+      <div class="pcard gt">
+        <div class="ptag ptag-g">Política Fiscal</div>
+        <div class="ph">México — Perspectiva 2026</div>
+        <p class="pp">SHCP proyecta déficit de ~3.5% del PIB con tipo de cambio estimado en <strong>~18.90 ppd</strong> al cierre. El "Plan México" contempla inversión en infraestructura. S&P y Fitch cambiaron perspectiva soberana a negativa, elevando costo de financiamiento para filiales como <strong>Arauco México</strong>.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── NOTICIAS ─── -->
+<section id="noticias" style="padding:96px 56px">
+  <div class="ninner">
+    <div class="eyebrow eyebrow-l rev">Noticias Recientes 2025–2026</div>
+    <div class="gbar rev"></div>
+    <h2 class="sh shl rev" style="margin-bottom:48px">Evento de impacto <em>en el entorno Arauco</em></h2>
+    <div class="ncard rev">
+      <div>
+        <div class="ntag">Noviembre 2025 · Michoacán, México</div>
+        <h3 class="nh">Arauco avanza Proyecto Vikingo 2.0 con USD $300M — construcción al 90% en Zitácuaro</h3>
+        <p class="np">El gobernador de Michoacán visitó personalmente la obra, constatando un avance del 90%. La inversión —que creció de USD $235M a <strong>$300M</strong>— incorpora tecnología alemana e italiana de última generación y operará en circuito cerrado reutilizando el 100% del agua.</p>
+        <p class="np" style="margin-top:16px">La planta generará <strong>250–300 empleos permanentes</strong> y abastecerá hasta el 60% del consumo nacional de MDF (500,000 m³/año). El tipo de cambio actual (~17.22 MXN/USD) es más favorable que los niveles de 20.88 de finales de 2024, reduciendo el costo efectivo en dólares de insumos locales. Sin embargo, el PIB de +0.2% anual limita la demanda interna.</p>
+      </div>
+      <div class="naside">
+        <div class="albl">Impacto en Arauco MX</div>
+        <div class="aitem"><div class="adot dg"></div>Peso apreciado (~17.22) reduce costo de deuda USD</div>
+        <div class="aitem"><div class="adot dr"></div>PIB −0.8% trim. limita demanda local de MDF</div>
+        <div class="aitem"><div class="adot da"></div>Inflación 4.45% eleva costos laborales</div>
+        <div class="aitem"><div class="adot dg"></div>Nearshoring impulsa construcción industrial</div>
+        <div class="aitem"><div class="adot dr"></div>Perspectiva soberana negativa encarece financiamiento</div>
+        <div class="aitem"><div class="adot dg"></div>Liderazgo nacional en MDF al entrar en operación</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── RIESGOS ─── -->
+<section id="riesgos" class="section">
+  <div class="si">
+    <div class="rev">
+      <div class="eyebrow">Entorno Macroeconómico</div>
+      <div class="gbar"></div>
+      <h2 class="sh">Riesgos y <em>oportunidades</em></h2>
+      <p class="slead" style="margin-bottom:40px">Factores estructurales que amplifican o mitigan el impacto de los indicadores en las operaciones de Arauco México.</p>
+    </div>
+
+    <!-- RISK MATRIX -->
+    <div class="risk-matrix rev">
+      <div class="matrix-title">Matriz de riesgo — Probabilidad vs. Impacto</div>
+      <div style="display:grid;grid-template-columns:48px 1fr 1fr 1fr;grid-template-rows:auto 72px 72px 72px;gap:4px;align-items:center">
+        <div style="font-family:var(--fm2);font-size:9px;letter-spacing:1px;color:var(--ink4);writing-mode:vertical-rl;transform:rotate(180deg);text-align:center;grid-row:1/5;display:flex;align-items:center;justify-content:center">IMPACTO</div>
+        <div style="font-family:var(--fm2);font-size:10px;color:var(--ink4);text-align:center;padding:4px">BAJO</div>
+        <div style="font-family:var(--fm2);font-size:10px;color:var(--ink4);text-align:center;padding:4px">MEDIO</div>
+        <div style="font-family:var(--fm2);font-size:10px;color:var(--ink4);text-align:center;padding:4px">ALTO</div>
+        <!-- Row: Alta prob -->
+        <div class="mx-cell mx-me" style="font-size:11px;padding:8px;border-radius:8px">Desempleo MX</div>
+        <div class="mx-cell mx-hi" style="font-size:11px;padding:8px;border-radius:8px">Estancamiento PIB</div>
+        <div class="mx-cell mx-hi" style="font-size:11px;padding:8px;border-radius:8px">Shock energético</div>
+        <!-- Row: Media prob -->
+        <div class="mx-cell mx-lo" style="font-size:11px;padding:8px;border-radius:8px">Regulaciones amb.</div>
+        <div class="mx-cell mx-me" style="font-size:11px;padding:8px;border-radius:8px">Balanza de pagos</div>
+        <div class="mx-cell mx-hi" style="font-size:11px;padding:8px;border-radius:8px">Riesgo cambiario</div>
+        <!-- Row: Baja prob -->
+        <div class="mx-cell mx-lo" style="font-size:11px;padding:8px;border-radius:8px">Nearshoring ✓</div>
+        <div class="mx-cell mx-lo" style="font-size:11px;padding:8px;border-radius:8px">Sostenibilidad ✓</div>
+        <div class="mx-cell mx-me" style="font-size:11px;padding:8px;border-radius:8px">Incert. T-MEC</div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:12px;font-size:11px">
+        <div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:12px;border-radius:3px;background:#E8F4E9"></div><span style="color:var(--ink3)">Bajo</span></div>
+        <div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:12px;border-radius:3px;background:#FEF9EC"></div><span style="color:var(--ink3)">Medio</span></div>
+        <div style="display:flex;align-items:center;gap:6px"><div style="width:12px;height:12px;border-radius:3px;background:#FDEDEC"></div><span style="color:var(--ink3)">Alto</span></div>
+      </div>
+    </div>
+
+    <div class="rgrid">
+      <div class="rcard rev"><div class="rcacc rc-r"></div><div class="rci">⚠️</div><div class="rct">Riesgo Cambiario Transaccional</div><div class="rcp">Arauco adquiere urea (USD $616/ton), metanol y melamina en dólares pero vende en pesos. El rango anual 17.08–19.57 MXN/USD expone márgenes a reversiones bruscas.</div><div class="rcl lh">Riesgo Alto</div></div>
+      <div class="rcard rev"><div class="rcacc rc-r"></div><div class="rci">📉</div><div class="rct">Estancamiento Económico México</div><div class="rcp">PIB Q1 2026: +0.2% anual y −0.8% trimestral. Pérdida de 227,155 empleos formales en manufactura y construcción. Proyección anual: 1.0–1.2%.</div><div class="rcl lh">Riesgo Alto</div></div>
+      <div class="rcard rev"><div class="rcacc rc-a"></div><div class="rci">🌐</div><div class="rct">Shock Energético — Guerra Irán</div><div class="rcp">Conflicto EE.UU.-Israel vs. Irán (desde feb 2026): petróleo >$100/barril. El gas natural —correlacionado— encarece metanol y urea. Inflación EE.UU. en 3.8%.</div><div class="rcl lm">Riesgo Medio-Alto</div></div>
+      <div class="rcard rev"><div class="rcacc rc-a"></div><div class="rci">⚖️</div><div class="rct">Incertidumbre T-MEC</div><div class="rcp">Revisión formal del T-MEC en 2026. Aranceles a productos de madera podrían encarecer exportaciones. S&P y Fitch cambiaron perspectiva soberana MX a negativa.</div><div class="rcl lm">Riesgo Medio</div></div>
+      <div class="rcard rev"><div class="rcacc rc-g"></div><div class="rci">🏗️</div><div class="rct">Oportunidad: Nearshoring</div><div class="rcp">Relocalización de manufactura genera demanda de parques industriales, bodegas y oficinas — clientes directos de tableros MDF. Nuevo León, Guanajuato y Jalisco lideran.</div><div class="rcl lg">Oportunidad Alta</div></div>
+      <div class="rcard rev"><div class="rcacc rc-g"></div><div class="rci">🌿</div><div class="rct">Oportunidad: Sostenibilidad</div><div class="rcp">Circuito cerrado en Zitácuaro y certificación SBTi (−40.6% emisiones Scope 1 y 2 para 2030) generan ventaja competitiva ante regulaciones más estrictas.</div><div class="rcl lg">Oportunidad Media</div></div>
+      <div class="rcard rev"><div class="rcacc rc-a"></div><div class="rci">💹</div><div class="rct">Balanza de Pagos México</div><div class="rcp">Remesas >$60B anuales (máximo histórico) y superávit comercial manufacturero compensan déficit en cuenta corriente. Mundial 2026 aporta divisas adicionales.</div><div class="rcl lm">Riesgo Bajo-Medio</div></div>
+      <div class="rcard rev"><div class="rcacc rc-a"></div><div class="rci">📋</div><div class="rct">Regulaciones Ambientales</div><div class="rcp">México endurece normas de formaldehído alineándose al estándar TSCA. Arauco ya cumple con su certificación Arauco Melamina. Planta Zitácuaro mejor posicionada.</div><div class="rcl lm">Riesgo Medio</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── ESTRATEGIA ─── -->
+<section id="estrategia" style="padding:96px 56px">
+  <div class="stinner">
+    <div class="rev">
+      <div class="eyebrow eyebrow-l">Estrategia de Cobertura</div>
+      <div class="gbar"></div>
+      <h2 class="sh shl">Gestión del riesgo <em>cambiario</em></h2>
+      <p class="slead" style="color:rgba(255,255,255,.4)">Marco conceptual para Arauco México frente al riesgo USD/MXN. Análisis cuantitativo en la siguiente entrega.</p>
+    </div>
+    <div class="stgrid">
+      <div class="stcard rev"><div class="stn">01</div><div class="stt">Forwards de Tipo de Cambio</div><div class="stp">Contratos a plazo para fijar el tipo de cambio en pagos de urea, metanol y melamina, y en repatriación de utilidades. Elimina la incertidumbre en flujos previsibles.</div></div>
+      <div class="stcard rev"><div class="stn">02</div><div class="stt">Opciones Cambiarias</div><div class="stp">Puts sobre MXN para proteger ingresos en peso ante depreciaciones abruptas, manteniendo la posibilidad de beneficiarse de apreciaciones que mejoren el costo operativo.</div></div>
+      <div class="stcard rev"><div class="stn">03</div><div class="stt">Calce Natural de Monedas</div><div class="stp">Maximizar proveedores locales en MXN para reducir la exposición neta sin derivados. Aplica en insumos forestales de ejidos locales y servicios en territorio nacional.</div></div>
+      <div class="stcard rev"><div class="stn">04</div><div class="stt">Diversificación Geográfica</div><div class="stp">La operación simultánea en EE.UU., Canadá y Chile permite compensar exposiciones cambiarias entre subsidiarias, creando un hedge natural a nivel corporativo.</div></div>
+    </div>
+    <div class="stcoming rev">
+      <div class="sclbl">🔒 En desarrollo — Actividad 3</div>
+      <p class="scp">El análisis cuantitativo — VaR cambiario, dimensionamiento de la exposición transaccional en urea/metanol/melamina, selección de instrumentos y estructura de costos de cobertura — se presentará en la siguiente entrega del curso.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── EQUIPO ─── -->
+<section id="equipo" style="background:var(--cream);padding:96px 56px">
+  <div class="si">
+    <div class="rev">
+      <div class="eyebrow">Cedrus Advisory</div>
+      <div class="gbar"></div>
+      <h2 class="sh">Nuestro <em>equipo</em></h2>
+      <p class="slead">Estudiantes de Administración Financiera Internacional — Tecnológico de Monterrey · Mayo 2026.</p>
+    </div>
+
+    <div class="teqgrid" style="margin-top:48px">
+
+      <!-- Miembro 1 -->
+      <div class="tcard rev">
+        <div class="tphoto-placeholder" id="ph1" onclick="document.getElementById('fi1').click()" style="cursor:pointer" title="Haz clic para subir tu foto">
+          <div class="tphoto-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div class="tphoto-hint">Subir foto</div>
+          <button class="tphoto-upload" onclick="event.stopPropagation();document.getElementById('fi1').click()">+ Foto</button>
+        </div>
+        <input type="file" id="fi1" class="file-input" accept="image/*" onchange="loadPhoto(this,'ph1')"/>
+        <div class="tbody">
+          <div class="tname">Jose Pablo Mora</div>
+          <div class="trole">Análisis Macroeconómico</div>
+          <div class="tmat">Administración Financiera Internacional</div>
+          <div class="tbadge">Tec de Monterrey · 2026</div>
+        </div>
+      </div>
+
+      <!-- Miembro 2 -->
+      <div class="tcard rev">
+        <div class="tphoto-placeholder" id="ph2" onclick="document.getElementById('fi2').click()" style="cursor:pointer" title="Haz clic para subir tu foto">
+          <div class="tphoto-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div class="tphoto-hint">Subir foto</div>
+          <button class="tphoto-upload" onclick="event.stopPropagation();document.getElementById('fi2').click()">+ Foto</button>
+        </div>
+        <input type="file" id="fi2" class="file-input" accept="image/*" onchange="loadPhoto(this,'ph2')"/>
+        <div class="tbody">
+          <div class="tname">Nadia Velázquez</div>
+          <div class="trole">Estrategia de Cobertura</div>
+          <div class="tmat">Administración Financiera Internacional</div>
+          <div class="tbadge">Tec de Monterrey · 2026</div>
+        </div>
+      </div>
+
+      <!-- Miembro 3 -->
+      <div class="tcard rev">
+        <div class="tphoto-placeholder" id="ph3" onclick="document.getElementById('fi3').click()" style="cursor:pointer" title="Haz clic para subir tu foto">
+          <div class="tphoto-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div class="tphoto-hint">Subir foto</div>
+          <button class="tphoto-upload" onclick="event.stopPropagation();document.getElementById('fi3').click()">+ Foto</button>
+        </div>
+        <input type="file" id="fi3" class="file-input" accept="image/*" onchange="loadPhoto(this,'ph3')"/>
+        <div class="tbody">
+          <div class="tname">Moisés Pedroza</div>
+          <div class="trole">Análisis de Riesgos</div>
+          <div class="tmat">Administración Financiera Internacional</div>
+          <div class="tbadge">Tec de Monterrey · 2026</div>
+        </div>
+      </div>
+
+      <!-- Miembro 4 -->
+      <div class="tcard rev">
+        <div class="tphoto-placeholder" id="ph4" onclick="document.getElementById('fi4').click()" style="cursor:pointer" title="Haz clic para subir tu foto">
+          <div class="tphoto-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div class="tphoto-hint">Subir foto</div>
+          <button class="tphoto-upload" onclick="event.stopPropagation();document.getElementById('fi4').click()">+ Foto</button>
+        </div>
+        <input type="file" id="fi4" class="file-input" accept="image/*" onchange="loadPhoto(this,'ph4')"/>
+        <div class="tbody">
+          <div class="tname">Edgar Torres</div>
+          <div class="trole">Desarrollo Web & Datos</div>
+          <div class="tmat">Administración Financiera Internacional</div>
+          <div class="tbadge">Tec de Monterrey · 2026</div>
+        </div>
+      </div>
+
+      <!-- Miembro 5 -->
+      <div class="tcard rev">
+        <div class="tphoto-placeholder" id="ph5" onclick="document.getElementById('fi5').click()" style="cursor:pointer" title="Haz clic para subir tu foto">
+          <div class="tphoto-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div class="tphoto-hint">Subir foto</div>
+          <button class="tphoto-upload" onclick="event.stopPropagation();document.getElementById('fi5').click()">+ Foto</button>
+        </div>
+        <input type="file" id="fi5" class="file-input" accept="image/*" onchange="loadPhoto(this,'ph5')"/>
+        <div class="tbody">
+          <div class="tname">Andrés Grijalva</div>
+          <div class="trole">Indicadores Macroeconómicos</div>
+          <div class="tmat">Administración Financiera Internacional</div>
+          <div class="tbadge">Tec de Monterrey · 2026</div>
+        </div>
+      </div>
+
+      <!-- Miembro 6 -->
+      <div class="tcard rev">
+        <div class="tphoto-placeholder" id="ph6" onclick="document.getElementById('fi6').click()" style="cursor:pointer" title="Haz clic para subir tu foto">
+          <div class="tphoto-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div class="tphoto-hint">Subir foto</div>
+          <button class="tphoto-upload" onclick="event.stopPropagation();document.getElementById('fi6').click()">+ Foto</button>
+        </div>
+        <input type="file" id="fi6" class="file-input" accept="image/*" onchange="loadPhoto(this,'ph6')"/>
+        <div class="tbody">
+          <div class="tname">Diego Díaz</div>
+          <div class="trole">Noticias & Entorno</div>
+          <div class="tmat">Administración Financiera Internacional</div>
+          <div class="tbadge">Tec de Monterrey · 2026</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div style="text-align:center;margin-top:40px;padding:24px;background:var(--white);border-radius:var(--rl);border:1px dashed var(--brd)" class="rev">
+      <div style="font-family:var(--fm2);font-size:11px;letter-spacing:2px;text-transform:uppercase;color:var(--ink4);margin-bottom:8px">Instrucciones</div>
+      <p style="font-size:13px;color:var(--ink3);max-width:480px;margin:0 auto;line-height:1.7">Haz clic en el área de foto de cada integrante para subir tu imagen. Las fotos se cargan localmente y se verán en la página una vez publicada en GitHub Pages.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer>
+  <div class="ftinner">
+    <div>
+      <div class="ftbrand">ARAUCO <span>MX</span></div>
+      <p class="ftdesc">Análisis macroeconómico desarrollado por Cedrus Advisory para el curso de Administración Financiera Internacional · Tecnológico de Monterrey · Mayo 2026.</p>
+    </div>
+    <div>
+      <div class="fth">Navegación</div>
+      <ul class="ftlist">
+        <li><a href="#sobre">Perfil de la empresa</a></li>
+        <li><a href="#macro">Indicadores macroeconómicos</a></li>
+        <li><a href="#noticias">Noticias recientes</a></li>
+        <li><a href="#riesgos">Riesgos y oportunidades</a></li>
+        <li><a href="#estrategia">Estrategia de cobertura</a></li>
+        <li><a href="#equipo">Nuestro equipo</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="fth">Fuentes de datos</div>
+      <ul class="ftlist">
+        <li><a href="#">INEGI — Boletín INPC 277/26</a></li>
+        <li><a href="#">Banxico — Comunicado 7 mayo 2026</a></li>
+        <li><a href="#">BLS — USDL-26-0721 · empsit mayo</a></li>
+        <li><a href="#">Federal Reserve — FOMC 29 abril 2026</a></li>
+        <li><a href="#">Arauco — Reporte Integrado 2024</a></li>
+        <li><a href="#">Feller Rate · Investing.com · SHCP</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="ftcopy">
+    <div class="ftct">© 2026 Cedrus Advisory · Administración Financiera Internacional · Tec de Monterrey</div>
+    <div class="ftsr">Jose Pablo Mora · Nadia Velázquez · Moisés Pedroza<br/>Edgar Torres · Andrés Grijalva · Diego Díaz</div>
+  </div>
+</footer>
+
+</div><!-- /page-main -->
+
+<!-- ══════════════ PAGE EQUIPO ══════════════ -->
+<div id="page-team" class="page">
+  <div style="min-height:100vh;background:var(--fd);display:flex;flex-direction:column;align-items:center;justify-content:center;padding:64px 32px;position:relative;overflow:hidden">
+    <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);background-size:60px 60px;pointer-events:none"></div>
+    <a href="#" onclick="goMain();return false;" style="position:absolute;top:32px;left:40px;color:rgba(255,255,255,.4);font-size:13px;text-decoration:none;display:flex;align-items:center;gap:8px;font-weight:500">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 5l-7 7 7 7"/></svg>
+      Volver al análisis
+    </a>
+    <div style="font-family:var(--fm2);font-size:11px;letter-spacing:4px;text-transform:uppercase;color:var(--gold);margin-bottom:16px">Cedrus Advisory · AFI 2026</div>
+    <h2 style="font-size:clamp(32px,5vw,56px);font-weight:700;color:var(--white);text-align:center;margin-bottom:8px">Nuestro <em style="color:var(--gold-l);font-style:italic">Equipo</em></h2>
+    <p style="font-size:14px;color:rgba(255,255,255,.4);margin-bottom:56px;text-align:center">Tecnológico de Monterrey · Administración Financiera Internacional · Mayo 2026</p>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:24px;max-width:900px;width:100%">
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--rl);overflow:hidden;text-align:center" onclick="document.getElementById('tfi1').click()" title="Clic para subir foto" style="cursor:pointer">
+        <div id="tph1" style="width:100%;height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.03);cursor:pointer" onclick="document.getElementById('tfi1').click()">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(200,146,42,.15);border:1px solid rgba(200,146,42,.3);display:flex;align-items:center;justify-content:center">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="rgba(200,146,42,.7)"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div style="font-size:10px;color:rgba(255,255,255,.2);letter-spacing:1px;text-transform:uppercase;margin-top:10px">Subir foto</div>
+        </div>
+        <input type="file" id="tfi1" class="file-input" accept="image/*" onchange="loadTeamPhoto(this,'tph1')"/>
+        <div style="padding:16px 20px">
+          <div style="font-weight:600;font-size:15px;color:var(--white)">Jose Pablo Mora</div>
+          <div style="font-family:var(--fm2);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-top:4px">Análisis Macroeconómico</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--rl);overflow:hidden;text-align:center">
+        <div id="tph2" style="width:100%;height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.03);cursor:pointer" onclick="document.getElementById('tfi2').click()">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(200,146,42,.15);border:1px solid rgba(200,146,42,.3);display:flex;align-items:center;justify-content:center">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="rgba(200,146,42,.7)"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div style="font-size:10px;color:rgba(255,255,255,.2);letter-spacing:1px;text-transform:uppercase;margin-top:10px">Subir foto</div>
+        </div>
+        <input type="file" id="tfi2" class="file-input" accept="image/*" onchange="loadTeamPhoto(this,'tph2')"/>
+        <div style="padding:16px 20px">
+          <div style="font-weight:600;font-size:15px;color:var(--white)">Nadia Velázquez</div>
+          <div style="font-family:var(--fm2);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-top:4px">Estrategia de Cobertura</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--rl);overflow:hidden;text-align:center">
+        <div id="tph3" style="width:100%;height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.03);cursor:pointer" onclick="document.getElementById('tfi3').click()">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(200,146,42,.15);border:1px solid rgba(200,146,42,.3);display:flex;align-items:center;justify-content:center">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="rgba(200,146,42,.7)"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div style="font-size:10px;color:rgba(255,255,255,.2);letter-spacing:1px;text-transform:uppercase;margin-top:10px">Subir foto</div>
+        </div>
+        <input type="file" id="tfi3" class="file-input" accept="image/*" onchange="loadTeamPhoto(this,'tph3')"/>
+        <div style="padding:16px 20px">
+          <div style="font-weight:600;font-size:15px;color:var(--white)">Moisés Pedroza</div>
+          <div style="font-family:var(--fm2);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-top:4px">Análisis de Riesgos</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--rl);overflow:hidden;text-align:center">
+        <div id="tph4" style="width:100%;height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.03);cursor:pointer" onclick="document.getElementById('tfi4').click()">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(200,146,42,.15);border:1px solid rgba(200,146,42,.3);display:flex;align-items:center;justify-content:center">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="rgba(200,146,42,.7)"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div style="font-size:10px;color:rgba(255,255,255,.2);letter-spacing:1px;text-transform:uppercase;margin-top:10px">Subir foto</div>
+        </div>
+        <input type="file" id="tfi4" class="file-input" accept="image/*" onchange="loadTeamPhoto(this,'tph4')"/>
+        <div style="padding:16px 20px">
+          <div style="font-weight:600;font-size:15px;color:var(--white)">Edgar Torres</div>
+          <div style="font-family:var(--fm2);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-top:4px">Desarrollo Web & Datos</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--rl);overflow:hidden;text-align:center">
+        <div id="tph5" style="width:100%;height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.03);cursor:pointer" onclick="document.getElementById('tfi5').click()">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(200,146,42,.15);border:1px solid rgba(200,146,42,.3);display:flex;align-items:center;justify-content:center">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="rgba(200,146,42,.7)"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div style="font-size:10px;color:rgba(255,255,255,.2);letter-spacing:1px;text-transform:uppercase;margin-top:10px">Subir foto</div>
+        </div>
+        <input type="file" id="tfi5" class="file-input" accept="image/*" onchange="loadTeamPhoto(this,'tph5')"/>
+        <div style="padding:16px 20px">
+          <div style="font-weight:600;font-size:15px;color:var(--white)">Andrés Grijalva</div>
+          <div style="font-family:var(--fm2);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-top:4px">Indicadores Macroeconómicos</div>
+        </div>
+      </div>
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--rl);overflow:hidden;text-align:center">
+        <div id="tph6" style="width:100%;height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.03);cursor:pointer" onclick="document.getElementById('tfi6').click()">
+          <div style="width:64px;height:64px;border-radius:50%;background:rgba(200,146,42,.15);border:1px solid rgba(200,146,42,.3);display:flex;align-items:center;justify-content:center">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="rgba(200,146,42,.7)"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          </div>
+          <div style="font-size:10px;color:rgba(255,255,255,.2);letter-spacing:1px;text-transform:uppercase;margin-top:10px">Subir foto</div>
+        </div>
+        <input type="file" id="tfi6" class="file-input" accept="image/*" onchange="loadTeamPhoto(this,'tph6')"/>
+        <div style="padding:16px 20px">
+          <div style="font-weight:600;font-size:15px;color:var(--white)">Diego Díaz</div>
+          <div style="font-family:var(--fm2);font-size:10px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-top:4px">Noticias & Entorno</div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<!-- ═══════════════════════════════════════════
-     PAGE 1 — MAIN SITE
-═══════════════════════════════════════════ -->
-<div id="page-main" class="page">
-
-  <!-- NAV -->
-  <nav>
-    <a href="#" class="nav-brand" onclick="goToCover(); return false;">
-      ARAUCO <span>&nbsp;MX</span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="#sobre" class="active">Portada</a></li>
-      <li><a href="#macro">Variables Macro</a></li>
-      <li><a href="#riesgos">Riesgos</a></li>
-      <li><a href="#estrategia">Cobertura</a></li>
-    </ul>
-  </nav>
-
-  <!-- SOBRE ARAUCO -->
-  <div style="background:var(--gray-100); padding: 40px 24px 0;">
-    <div id="sobre">
-      <div class="section-eyebrow">Quiénes Somos</div>
-      <div class="divider-line"></div>
-      <div class="sobre-grid">
-        <div>
-          <h2 class="section-title">ARAUCO en<br/><span>México</span></h2>
-          <p style="font-size:15px; line-height:1.8; color:var(--gray-800); margin-bottom:24px;">
-            Arauco es una empresa forestal chilena fundada en 1979, parte del Grupo Empresas Copec (Grupo Angelini). Opera en 11 países produciendo celulosa, madera aserrada, paneles y energía renovable. En México mantiene dos plantas y una planta de resinas, consolidándose como actor clave en la industria de tableros del país.
-          </p>
-          <p style="font-size:15px; line-height:1.8; color:var(--gray-800);">
-            Su principal apuesta en México es el <strong>Proyecto Vikingo 2.0</strong> en Zitácuaro, Michoacán: una inversión de <strong>USD $300 millones</strong> para producir 300,000 m³ anuales de MDF y 150,000 m³ de melamina, con tecnología de circuito cerrado alemana e italiana. La planta abastecerá más del 50% del consumo nacional de tableros MDF.
-          </p>
-
-          <div class="sobre-kpis">
-            <div class="kpi-card">
-              <div class="kpi-val">USD $6.01B</div>
-              <div class="kpi-lbl">Ventas globales (2023)</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-val">19,000+</div>
-              <div class="kpi-lbl">Trabajadores en el mundo</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-val">28</div>
-              <div class="kpi-lbl">Plantas de paneles globales</div>
-            </div>
-            <div class="kpi-card">
-              <div class="kpi-val">11</div>
-              <div class="kpi-lbl">Países con presencia industrial</div>
-            </div>
-          </div>
-        </div>
-
-        <div>
-          <p style="font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px; color:var(--green-mid); text-transform:uppercase; margin-bottom:24px;">Hitos Clave — México</p>
-          <div class="sobre-timeline">
-            <div class="tl-item">
-              <div class="tl-dot"></div>
-              <div class="tl-year">1979</div>
-              <div class="tl-text">Fundación de Celulosa Arauco y Constitución S.A. mediante fusión de dos empresas forestales chilenas privatizadas.</div>
-            </div>
-            <div class="tl-item">
-              <div class="tl-dot"></div>
-              <div class="tl-year">2000s</div>
-              <div class="tl-text">Arauco establece sus primeras operaciones en México con plantas de paneles y una planta de resinas.</div>
-            </div>
-            <div class="tl-item">
-              <div class="tl-dot"></div>
-              <div class="tl-year">2019</div>
-              <div class="tl-text">Inaugura planta Grayling en Michigan, EE.UU. (USD $450M) — la mayor inversión chilena en Norteamérica a esa fecha.</div>
-            </div>
-            <div class="tl-item">
-              <div class="tl-dot"></div>
-              <div class="tl-year">Sep 2022</div>
-              <div class="tl-text">Directorio aprueba inversión de USD $235M para nueva línea MDF en Zitácuaro, Michoacán (Proyecto Vikingo 2.0).</div>
-            </div>
-            <div class="tl-item">
-              <div class="tl-dot" style="background:var(--gold); box-shadow:0 0 0 2px var(--gold);"></div>
-              <div class="tl-year">2025–2026</div>
-              <div class="tl-text">Inversión crece a USD $300M. Construcción al 90% en noviembre 2025. Inicio de operaciones programado para 2026 con tecnología alemana e italiana de última generación.</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MACRO -->
-  <section id="macro">
-    <div class="macro-header reveal">
-      <div>
-        <div class="section-eyebrow">Variables Macroeconómicas</div>
-        <div class="divider-line"></div>
-        <h2 class="section-title">5 Indicadores Clave<br/><span>México vs. EE.UU. 2026</span></h2>
-        <p class="section-lead" style="margin-bottom:0;">Análisis del entorno macroeconómico bilateral con énfasis en el impacto sobre el tipo de cambio USD/MXN y las operaciones de Arauco México.</p>
-      </div>
-      <div class="usdmxn-badge">
-        <div class="usdmxn-rate">17.35</div>
-        <div class="usdmxn-label">USD / MXN</div>
-        <div class="usdmxn-date">Mayo 18, 2026 · Banxico</div>
-      </div>
-    </div>
-
-    <div class="indicators-grid">
-
-      <!-- 1. INFLACIÓN -->
-      <div class="ind-card reveal">
-        <div class="ind-header">
-          <div class="ind-icon" style="background:#e8f5e9;">📈</div>
-          <div>
-            <div class="ind-name">1. Inflación General</div>
-            <div class="ind-sub">Índice Nacional de Precios al Consumidor</div>
-          </div>
-        </div>
-        <div class="ind-body">
-          <div class="ind-row">
-            <span class="ind-country">🇲🇽 México</span>
-            <span class="ind-val" style="color:var(--red-risk);">4.45%</span>
-          </div>
-          <div class="ind-row">
-            <span class="ind-country">🇺🇸 EE.UU.</span>
-            <span class="ind-val" style="color:var(--green-mid);">~2.4%</span>
-          </div>
-          <div class="ind-row">
-            <span style="font-size:12px;color:var(--gray-500);">Diferencial</span>
-            <span class="badge badge-down">+2.05 pp ↑ presión MXN</span>
-          </div>
-          <div class="ind-impact">
-            <span style="font-size:12px; color:var(--gray-500);">Impacto USD/MXN:</span>
-            <span class="badge badge-down">Debilita el peso</span>
-          </div>
-          <div class="ind-relevance">
-            Mayor inflación en México frente a EE.UU. presiona la depreciación del MXN. Encarece insumos importados de Arauco (resinas, maquinaria) y eleva costos operativos denominados en pesos. Banxico mantiene objetivo de 3% ±1 pp.
-          </div>
-        </div>
-      </div>
-
-      <!-- 2. TASA DE INTERÉS -->
-      <div class="ind-card reveal">
-        <div class="ind-header">
-          <div class="ind-icon" style="background:#e3f2fd;">🏦</div>
-          <div>
-            <div class="ind-name">2. Tasa de Interés de Referencia</div>
-            <div class="ind-sub">Política monetaria de los bancos centrales</div>
-          </div>
-        </div>
-        <div class="ind-body">
-          <div class="ind-row">
-            <span class="ind-country">🇲🇽 Banxico</span>
-            <span class="ind-val" style="color:var(--green-mid);">7.00%</span>
-          </div>
-          <div class="ind-row">
-            <span class="ind-country">🇺🇸 Fed Funds</span>
-            <span class="ind-val" style="color:var(--blue-data);">4.25–4.50%</span>
-          </div>
-          <div class="ind-row">
-            <span style="font-size:12px;color:var(--gray-500);">Diferencial</span>
-            <span class="badge badge-up">~2.75 pp favorece MXN</span>
-          </div>
-          <div class="ind-impact">
-            <span style="font-size:12px; color:var(--gray-500);">Impacto USD/MXN:</span>
-            <span class="badge badge-up">Fortalece el peso</span>
-          </div>
-          <div class="ind-relevance">
-            El diferencial positivo de tasas atrae flujos de capital (carry trade) hacia activos mexicanos, apoyando al peso. Banxico pausó recortes en enero 2026. Para Arauco, menores tipos de interés aliviarían el costo financiero del Proyecto Vikingo 2.0.
-          </div>
-        </div>
-      </div>
-
-      <!-- 3. PIB -->
-      <div class="ind-card reveal">
-        <div class="ind-header">
-          <div class="ind-icon" style="background:#fff3e0;">📊</div>
-          <div>
-            <div class="ind-name">3. Crecimiento del PIB</div>
-            <div class="ind-sub">Variación anual del Producto Interno Bruto</div>
-          </div>
-        </div>
-        <div class="ind-body">
-          <div class="ind-row">
-            <span class="ind-country">🇲🇽 México Q1 2026</span>
-            <span class="ind-val" style="color:var(--red-risk);">+0.1%</span>
-          </div>
-          <div class="ind-row">
-            <span class="ind-country">🇺🇸 EE.UU. 2025</span>
-            <span class="ind-val" style="color:var(--green-mid);">+2.1%</span>
-          </div>
-          <div class="ind-row">
-            <span style="font-size:12px;color:var(--gray-500);">Contracción trim. MX</span>
-            <span class="badge badge-down">-0.8% trim. Q1 2026</span>
-          </div>
-          <div class="ind-impact">
-            <span style="font-size:12px; color:var(--gray-500);">Impacto USD/MXN:</span>
-            <span class="badge badge-down">Debilita el peso</span>
-          </div>
-          <div class="ind-relevance">
-            El virtual estancamiento de la economía mexicana reduce la demanda interna de productos de construcción y muebles, mercados clave de Arauco. La brecha de crecimiento con EE.UU. presiona depreciatoriamente al MXN.
-          </div>
-        </div>
-      </div>
-
-      <!-- 4. DESEMPLEO -->
-      <div class="ind-card reveal">
-        <div class="ind-header">
-          <div class="ind-icon" style="background:#fce4ec;">👷</div>
-          <div>
-            <div class="ind-name">4. Tasa de Desempleo</div>
-            <div class="ind-sub">Porcentaje de la Población Económicamente Activa</div>
-          </div>
-        </div>
-        <div class="ind-body">
-          <div class="ind-row">
-            <span class="ind-country">🇲🇽 México</span>
-            <span class="ind-val" style="color:var(--green-mid);">~2.8%</span>
-          </div>
-          <div class="ind-row">
-            <span class="ind-country">🇺🇸 EE.UU.</span>
-            <span class="ind-val" style="color:var(--gold);">~4.2%</span>
-          </div>
-          <div class="ind-row">
-            <span style="font-size:12px;color:var(--gray-500);">Tendencia EE.UU.</span>
-            <span class="badge badge-neutral">Al alza desde 2024</span>
-          </div>
-          <div class="ind-impact">
-            <span style="font-size:12px; color:var(--gray-500);">Impacto USD/MXN:</span>
-            <span class="badge badge-neutral">Efecto mixto</span>
-          </div>
-          <div class="ind-relevance">
-            Bajo desempleo en México implica presión salarial y menor disponibilidad de mano de obra para la planta de Zitácuaro. El enfriamiento laboral en EE.UU. modera la Fed y puede depreciar el dólar, favoreciendo competitividad exportadora de Arauco.
-          </div>
-        </div>
-      </div>
-
-      <!-- 5. TIPO DE CAMBIO -->
-      <div class="ind-card reveal" style="grid-column: span 1;">
-        <div class="ind-header">
-          <div class="ind-icon" style="background:#e8f5e9;">💱</div>
-          <div>
-            <div class="ind-name">5. Tipo de Cambio USD/MXN</div>
-            <div class="ind-sub">Régimen flotante — Banco de México</div>
-          </div>
-        </div>
-        <div class="ind-body">
-          <div class="ind-row">
-            <span class="ind-country">Spot Mayo 2026</span>
-            <span class="ind-val" style="color:var(--green-dark);">17.35</span>
-          </div>
-          <div class="ind-row">
-            <span style="font-size:12px;color:var(--gray-500);">Cierre 2025</span>
-            <span class="ind-val" style="font-size:16px;">18.00</span>
-          </div>
-          <div class="ind-row">
-            <span style="font-size:12px;color:var(--gray-500);">Proyección SHCP dic 2026</span>
-            <span class="badge badge-down">~18.90 ppd</span>
-          </div>
-          <div class="ind-impact">
-            <span style="font-size:12px; color:var(--gray-500);">Impacto en Arauco:</span>
-            <span class="badge badge-down">Riesgo cambiario elevado</span>
-          </div>
-          <div class="ind-relevance">
-            Arauco factura ingresos en MXN pero reporta globalmente en USD. Una depreciación del peso reduce el valor en dólares de sus ingresos mexicanos. La volatilidad del par USD/MXN (rango 2026: 17–20) exige estrategia de cobertura cambiaria activa.
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /indicators-grid -->
-
-    <!-- COMPARISON CHART -->
-    <div class="chart-wrapper reveal">
-      <div class="chart-title">Comparativa de Indicadores Macroeconómicos — México vs. EE.UU. (2026)</div>
-      <div class="bar-group" id="barChart">
-
-        <div style="display:flex; gap:24px; margin-bottom:8px;">
-          <div style="display:flex;align-items:center;gap:8px;"><div style="width:16px;height:10px;background:linear-gradient(90deg,var(--green-mid),var(--green-accent));border-radius:2px;"></div><span style="font-size:12px;">México</span></div>
-          <div style="display:flex;align-items:center;gap:8px;"><div style="width:16px;height:10px;background:linear-gradient(90deg,var(--blue-data),#2980b9);border-radius:2px;"></div><span style="font-size:12px;">EE.UU.</span></div>
-        </div>
-
-        <div class="bar-item">
-          <div class="bar-label">Inflación</div>
-          <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
-            <div class="bar-track"><div class="bar-fill bar-mx" data-width="89">4.45%</div></div>
-            <div class="bar-track"><div class="bar-fill bar-us" data-width="48">2.4%</div></div>
-          </div>
-        </div>
-
-        <div class="bar-item">
-          <div class="bar-label">Tasa de Referencia</div>
-          <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
-            <div class="bar-track"><div class="bar-fill bar-mx" data-width="100">7.00%</div></div>
-            <div class="bar-track"><div class="bar-fill bar-us" data-width="64">4.375%</div></div>
-          </div>
-        </div>
-
-        <div class="bar-item">
-          <div class="bar-label">Crecimiento PIB</div>
-          <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
-            <div class="bar-track"><div class="bar-fill bar-mx" data-width="5">0.1%</div></div>
-            <div class="bar-track"><div class="bar-fill bar-us" data-width="42">2.1%</div></div>
-          </div>
-        </div>
-
-        <div class="bar-item">
-          <div class="bar-label">Desempleo</div>
-          <div style="flex:1; display:flex; flex-direction:column; gap:4px;">
-            <div class="bar-track"><div class="bar-fill bar-mx" data-width="28">2.8%</div></div>
-            <div class="bar-track"><div class="bar-fill bar-us" data-width="42">4.2%</div></div>
-          </div>
-        </div>
-
-      </div>
-      <p style="font-size:11px; color:var(--gray-500); margin-top:20px;">Fuentes: INEGI, Banxico, BLS, Fed Reserve — Mayo 2026. Escala ilustrativa relativa.</p>
-    </div>
-
-    <!-- POLÍTICAS ECONÓMICAS -->
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:40px;" class="reveal">
-      <div style="background:var(--white); border-radius:var(--radius-lg); padding:32px; box-shadow:var(--shadow-card);">
-        <div style="font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--green-mid); margin-bottom:12px;">Política Monetaria</div>
-        <h3 style="font-family:'Playfair Display',serif; font-size:18px; color:var(--green-dark); margin-bottom:16px;">Banxico & Fed</h3>
-        <p style="font-size:13px; line-height:1.8; color:var(--gray-800);">Banxico pausó su ciclo de recortes en enero 2026 con tasa en <strong>7.00%</strong>, ante presiones inflacionarias (4.45% abril) que superan el rango objetivo. La Fed mantiene 4.25–4.50% mientras evalúa datos laborales. El diferencial positivo de ~2.75 pp sostiene flujos de carry trade hacia el peso, amortiguando depreciaciones abruptas.</p>
-      </div>
-      <div style="background:var(--white); border-radius:var(--radius-lg); padding:32px; box-shadow:var(--shadow-card);">
-        <div style="font-family:'DM Mono',monospace; font-size:11px; letter-spacing:2px; text-transform:uppercase; color:var(--green-mid); margin-bottom:12px;">Política Fiscal</div>
-        <h3 style="font-family:'Playfair Display',serif; font-size:18px; color:var(--green-dark); margin-bottom:16px;">México 2026</h3>
-        <p style="font-size:13px; line-height:1.8; color:var(--gray-800);">La SHCP proyecta déficit fiscal de ~3.5% del PIB para 2026, con tipo de cambio estimado en <strong>18.90 ppd</strong> al cierre. S&amp;P Global cambió la perspectiva soberana de México a negativa, lo que presiona el costo del financiamiento externo y eleva la prima de riesgo país, afectando indirectamente el servicio de deuda de filiales como Arauco México.</p>
-      </div>
-    </div>
-  </section>
-
-  <!-- NOTICIAS RECIENTES -->
-  <section id="noticias" style="background:var(--gray-100);">
-    <div class="section-eyebrow reveal">Noticias Recientes 2025–2026</div>
-    <div class="divider-line reveal"></div>
-    <h2 class="section-title reveal">Evento de Impacto<br/><span>en el Entorno Arauco</span></h2>
-
-    <div class="news-card reveal">
-      <div>
-        <div class="news-tag">Noviembre 2025 · Michoacán, México</div>
-        <h3 class="news-title">Arauco avanza Proyecto Vikingo 2.0 con inversión de USD $300M — 90% de construcción completada</h3>
-        <p class="news-body">
-          El gobernador de Michoacán, Alfredo Ramírez Bedolla, visitó personalmente la construcción de la nueva planta MDF de Arauco en Zitácuaro, constatando un avance del 90%. La inversión, que creció de USD $235M a $300M, incorpora tecnología alemana e italiana de última generación y operará en circuito cerrado reutilizando el 100% del agua.
-          <br/><br/>
-          La planta generará <strong>250–300 empleos permanentes</strong> y abastecerá hasta el 60% del consumo nacional de tableros MDF (estimado en 500,000 m³/año). Para Arauco, este evento consolida su posición competitiva en México en un contexto de tipo de cambio favorable (peso apreciado respecto a 2025), reduciendo el costo efectivo en dólares de los insumos locales.
-          <br/><br/>
-          El entorno macroeconómico genera presión dual: la desaceleración del PIB mexicano (+0.1% Q1 2026) limita la demanda interna de muebles y construcción, pero el nearshoring sostiene perspectivas de largo plazo para la industria de paneles de madera.
-        </p>
-      </div>
-      <div class="news-impact">
-        <div class="news-impact-title">Impacto en Arauco MX</div>
-        <div class="news-impact-item">
-          <span>🟢</span> Peso apreciado reduce costo de deuda en USD
-        </div>
-        <div class="news-impact-item">
-          <span>🔴</span> PIB estancado limita demanda local de MDF
-        </div>
-        <div class="news-impact-item">
-          <span>🟡</span> Inflación 4.45% eleva costos laborales
-        </div>
-        <div class="news-impact-item">
-          <span>🟢</span> Nearshoring impulsa construcción industrial
-        </div>
-        <div class="news-impact-item">
-          <span>🔴</span> Perspectiva soberana negativa S&P encarece financiamiento
-        </div>
-        <div class="news-impact-item">
-          <span>🟢</span> Capacidad instalada: liderazgo nacional en MDF
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- RIESGOS -->
-  <div id="riesgos">
-    <div style="max-width:1280px; margin:0 auto;">
-      <div class="section-eyebrow reveal">Entorno Macroeconómico</div>
-      <div class="divider-line reveal"></div>
-      <h2 class="section-title reveal">Riesgos y<br/><span>Oportunidades</span></h2>
-      <p class="section-lead reveal">Análisis de factores estructurales que amplifican o mitigan el impacto de los indicadores macroeconómicos en las operaciones de Arauco México.</p>
-
-      <div class="risks-grid">
-        <div class="risk-card risk-high reveal">
-          <div class="risk-icon">⚖️</div>
-          <div class="risk-title">Incertidumbre Arancelaria T-MEC</div>
-          <div class="risk-text">La revisión formal del T-MEC inicia el 1 de julio de 2026. Nuevos aranceles en productos de madera y paneles podrían encarecer las exportaciones de Arauco hacia EE.UU. y Canadá, afectando márgenes y flujos en USD que respaldan la operación mexicana.</div>
-          <div class="risk-level lvl-high">Riesgo Alto</div>
-        </div>
-
-        <div class="risk-card risk-high reveal">
-          <div class="risk-icon">📉</div>
-          <div class="risk-title">Estancamiento Económico México</div>
-          <div class="risk-text">PIB Q1 2026 en +0.1% anual y -0.8% trimestral. La demanda de tableros MDF está directamente correlacionada con la actividad constructora y de manufactura de muebles. Un ciclo recesivo comprimiría el mercado para el que fue diseñada la nueva planta de Zitácuaro.</div>
-          <div class="risk-level lvl-high">Riesgo Alto</div>
-        </div>
-
-        <div class="risk-card risk-mid reveal">
-          <div class="risk-icon">💹</div>
-          <div class="risk-title">Volatilidad Cambiaria USD/MXN</div>
-          <div class="risk-text">El par USD/MXN oscila en rango 17–20 en 2026. Arauco contabiliza ingresos en MXN y repatría dividendos en USD. Una depreciación brusca del peso puede erosionar hasta un 15% el valor en dólares de flujos operativos, exigiendo cobertura activa con forwards o opciones.</div>
-          <div class="risk-level lvl-mid">Riesgo Medio</div>
-        </div>
-
-        <div class="risk-card risk-mid reveal">
-          <div class="risk-icon">🏛️</div>
-          <div class="risk-title">Perspectiva Soberana Negativa</div>
-          <div class="risk-text">S&P Global y Fitch cambiaron la perspectiva soberana de México a negativa. Esto encarece el acceso al crédito externo y puede restringir opciones de refinanciamiento. Para Arauco, incrementa el costo de financiamiento de expansiones futuras y complica la gestión de la deuda del Proyecto Vikingo.</div>
-          <div class="risk-level lvl-mid">Riesgo Medio</div>
-        </div>
-
-        <div class="risk-card risk-low reveal">
-          <div class="risk-icon">🏗️</div>
-          <div class="risk-title">Oportunidad: Nearshoring</div>
-          <div class="risk-text">La relocalización de manufactura hacia México genera demanda de parques industriales, bodegas y oficinas — todos clientes de tableros MDF y madera. Estados como Nuevo León, Guanajuato y Jalisco concentran proyectos de nearshoring que elevan el consumo de materiales de construcción e interior.</div>
-          <div class="risk-level lvl-low">Oportunidad Alta</div>
-        </div>
-
-        <div class="risk-card risk-low reveal">
-          <div class="risk-icon">🌿</div>
-          <div class="risk-title">Oportunidad: Sostenibilidad</div>
-          <div class="risk-text">La certificación SBTi de Arauco (reducción 40.6% emisiones Alcance 1 y 2 para 2030) y la operación en circuito cerrado sin efluentes en Zitácuaro crean ventaja competitiva ante regulaciones medioambientales más estrictas en México y mercados de exportación. Posiciona a la empresa en compras sustentables del sector corporativo.</div>
-          <div class="risk-level lvl-low">Oportunidad Media</div>
-        </div>
-
-        <div class="risk-card risk-mid reveal">
-          <div class="risk-icon">🌐</div>
-          <div class="risk-title">Balanza de Pagos México</div>
-          <div class="risk-text">México mantiene déficit en cuenta corriente. Las remesas (>USD $60B anuales) y el superávit comercial manufacturero compensan parcialmente. Para Arauco, la fortaleza de las exportaciones manufactureras sostiene el peso y facilita la conversión de ingresos en MXN a USD para distribución de dividendos hacia Chile.</div>
-          <div class="risk-level lvl-mid">Riesgo Bajo-Medio</div>
-        </div>
-
-        <div class="risk-card risk-mid reveal">
-          <div class="risk-icon">📋</div>
-          <div class="risk-title">Regulaciones Ambientales</div>
-          <div class="risk-text">México endurece regulaciones forestales y de emisiones industriales. La planta de Zitácuaro, al operar con circuito cerrado y materia prima de silvicultura certificada, está bien posicionada para cumplir futuras normas. Sin embargo, cambios regulatorios abruptos pueden incrementar costos de cumplimiento y tiempos de operación.</div>
-          <div class="risk-level lvl-mid">Riesgo Medio</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ESTRATEGIA DE COBERTURA -->
-  <div id="estrategia" style="padding: 72px 64px; background:var(--green-dark);">
-    <div style="max-width:1280px; margin:0 auto;">
-      <div class="section-eyebrow">Estrategia de Cobertura</div>
-      <div class="divider-line" style="background:var(--gold);"></div>
-      <h2 class="section-title" style="color:var(--white);">Gestión del Riesgo<br/><span style="color:var(--green-accent);">Cambiario</span></h2>
-      <p class="section-lead" style="color:rgba(255,255,255,0.5);">Marco conceptual de la estrategia de cobertura cambiaria para Arauco México frente al riesgo USD/MXN. Desarrollo detallado en construcción.</p>
-
-      <div class="strat-grid">
-        <div class="strat-card reveal">
-          <div class="strat-number">01</div>
-          <div class="strat-title">Forwards de Tipo de Cambio</div>
-          <div class="strat-text">Contratos a plazo para fijar el tipo de cambio en operaciones de repatriación de utilidades y pagos de insumos importados, eliminando la incertidumbre cambiaria en flujos previsibles.</div>
-        </div>
-        <div class="strat-card reveal">
-          <div class="strat-number">02</div>
-          <div class="strat-title">Opciones Cambiarias</div>
-          <div class="strat-text">Puts sobre MXN para proteger ingresos en peso ante depreciaciones abruptas, manteniendo la posibilidad de beneficiarse de apreciaciones del peso que reduzcan el costo en USD de la operación.</div>
-        </div>
-        <div class="strat-card reveal">
-          <div class="strat-number">03</div>
-          <div class="strat-title">Calce Natural</div>
-          <div class="strat-text">Alinear ingresos y egresos en la misma moneda: maximizar proveedores locales en MXN para reducir la exposición neta al tipo de cambio sin necesidad de instrumentos derivados.</div>
-        </div>
-        <div class="strat-card reveal">
-          <div class="strat-number">04</div>
-          <div class="strat-title">Diversificación Geográfica</div>
-          <div class="strat-text">La operación simultánea en EE.UU., Canadá y Chile permite compensar exposiciones cambiarias entre subsidiarias, creando un hedge natural a nivel corporativo de Grupo Arauco.</div>
-        </div>
-      </div>
-
-      <div class="strat-coming reveal">
-        <div class="strat-coming-label">🔒 En Desarrollo</div>
-        <div class="strat-coming-text">El análisis cuantitativo detallado de la estrategia de cobertura — incluyendo cálculo del VaR cambiario, selección de instrumentos y estructura de costos de cobertura — se presentará en la siguiente entrega.</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- FOOTER -->
-  <footer>
-    <div>
-      <div class="footer-brand">ARAUCO <span>MX</span></div>
-      <div style="font-size:12px; color:rgba(255,255,255,0.3); margin-top:4px;">Administración Financiera Internacional · Actividad 2 · 2026</div>
-    </div>
-    <div class="footer-info">
-      <div>Datos: INEGI · Banxico · Fed Reserve · SHCP · Empresas Copec</div>
-      <div>Gobierno de Michoacán · Feller Rate · Bloomberg · Investing.com</div>
-      <div style="margin-top:4px;">Mayo 2026 — Todos los derechos reservados</div>
-    </div>
-  </footer>
-
-</div><!-- /page-main -->
-
 <script>
-  // PAGE NAVIGATION
-  function goToMenu() {
-    document.getElementById('page-cover').classList.remove('active');
-    document.getElementById('page-main').classList.add('active');
-    window.scrollTo(0,0);
-    initAnimations();
-  }
+// CURSOR
+const dot=document.getElementById('dot'),ring=document.getElementById('ring');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;dot.style.left=mx+'px';dot.style.top=my+'px'});
+(function tick(){rx+=(mx-rx)*.12;ry+=(my-ry)*.12;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(tick)})();
 
-  function goToCover() {
-    document.getElementById('page-main').classList.remove('active');
-    document.getElementById('page-cover').classList.add('active');
-    window.scrollTo(0,0);
-  }
+// PAGE NAV
+function goMain(){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-main').classList.add('active');
+  document.getElementById('prog').style.display='block';
+  window.scrollTo(0,0);
+  setTimeout(()=>{initReveal();initCounters();initCharts();},100);
+}
+function goCover(){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-cover').classList.add('active');
+  window.scrollTo(0,0);
+}
+function goTeam(){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-team').classList.add('active');
+  window.scrollTo(0,0);
+}
 
-  // REVEAL ON SCROLL
-  function initAnimations() {
-    const reveals = document.querySelectorAll('.reveal');
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
-      });
-    }, { threshold: 0.1 });
-    reveals.forEach(r => io.observe(r));
+// PROGRESS
+window.addEventListener('scroll',()=>{
+  const pct=window.scrollY/(document.body.scrollHeight-window.innerHeight)*100;
+  document.getElementById('prog').style.width=pct+'%';
+  document.getElementById('mainnav')?.classList.toggle('scrolled',window.scrollY>20);
+  updateNav();
+});
 
-    // Animate bars
-    const bars = document.querySelectorAll('.bar-fill');
-    const barIO = new IntersectionObserver((entries) => {
-      entries.forEach(e => {
-        if (e.isIntersecting) {
-          const w = e.target.getAttribute('data-width');
-          e.target.style.width = w + '%';
-          barIO.unobserve(e.target);
+function updateNav(){
+  const secs=['sobre','macro','noticias','riesgos','estrategia','equipo'];
+  let cur='';
+  secs.forEach(id=>{const el=document.getElementById(id);if(el&&window.scrollY>=el.offsetTop-100)cur=id});
+  document.querySelectorAll('.nlinks a').forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+cur));
+}
+
+// REVEAL
+function initReveal(){
+  const els=document.querySelectorAll('.rev,.rev-l,.rev-r');
+  const io=new IntersectionObserver(e=>{e.forEach(x=>{if(x.isIntersecting){x.target.classList.add('on');io.unobserve(x.target)}})},{threshold:.1});
+  els.forEach(el=>io.observe(el));
+}
+
+// COUNTERS
+function initCounters(){
+  document.querySelectorAll('[data-count]').forEach(el=>{
+    const target=parseFloat(el.dataset.count);
+    const pre=el.dataset.prefix||'',suf=el.dataset.suffix||'';
+    const isInt=Number.isInteger(target);
+    const io=new IntersectionObserver(e=>{
+      e.forEach(x=>{
+        if(x.isIntersecting){
+          io.unobserve(el);
+          let start=null;
+          const dur=1400;
+          (function step(ts){
+            if(!start)start=ts;
+            const p=Math.min((ts-start)/dur,1);
+            const ease=1-Math.pow(1-p,4);
+            const v=target*ease;
+            el.textContent=pre+(isInt?Math.round(v).toLocaleString():v.toFixed(2))+suf;
+            if(p<1)requestAnimationFrame(step);
+          })(performance.now());
         }
       });
-    }, { threshold: 0.3 });
-    bars.forEach(b => barIO.observe(b));
-  }
+    },{threshold:.5});
+    io.observe(el);
+  });
+}
 
-  // NAV ACTIVE STATE
-  window.addEventListener('scroll', () => {
-    if (document.getElementById('page-main').classList.contains('active')) {
-      const sections = ['sobre','macro','riesgos','estrategia'];
-      const links = document.querySelectorAll('.nav-links a');
-      let current = '';
-      sections.forEach(id => {
-        const el = document.getElementById(id);
-        if (el && window.scrollY >= el.offsetTop - 120) current = id;
-      });
-      links.forEach(a => {
-        a.classList.remove('active');
-        if (a.getAttribute('href') === '#' + current) a.classList.add('active');
-      });
+// SMOOTH SCROLL
+document.querySelectorAll('.nlinks a').forEach(a=>{
+  a.addEventListener('click',e=>{
+    e.preventDefault();
+    const id=a.getAttribute('href').slice(1);
+    document.getElementById(id)?.scrollIntoView({behavior:'smooth',block:'start'});
+  });
+});
+
+// TAB SWITCHER
+function switchTab(name){
+  ['comparativo','usdmxn','radar'].forEach(t=>{
+    document.getElementById('tab-'+t).style.display=t===name?'grid':'none';
+  });
+  document.querySelectorAll('.tab').forEach((btn,i)=>{
+    const names=['comparativo','usdmxn','radar'];
+    btn.classList.toggle('active',names[i]===name);
+  });
+  if(name==='usdmxn' && !window.chartFXInit){initChartFX();window.chartFXInit=true;}
+  if(name==='radar' && !window.chartRadarInit){initChartRadar();initChartDona();window.chartRadarInit=true;}
+}
+
+// CHARTS
+let chartsInit=false;
+function initCharts(){
+  if(chartsInit)return;chartsInit=true;
+  Chart.defaults.font.family="'Poppins','Helvetica Neue',sans-serif";
+  Chart.defaults.color='#787878';
+
+  // Tasas
+  new Chart(document.getElementById('chartTasas'),{
+    type:'bar',
+    data:{
+      labels:['Ene 2025','Mar 2025','May 2025','Jul 2025','Sep 2025','Nov 2025','Ene 2026','Mar 2026','May 2026'],
+      datasets:[
+        {label:'Banxico (MX)',data:[9.5,9.0,8.5,8.0,7.5,7.25,6.75,6.5,6.5],backgroundColor:'rgba(46,90,58,.7)',borderRadius:3},
+        {label:'Fed (EE.UU.)',data:[4.375,4.375,4.125,3.875,3.625,3.625,3.625,3.625,3.625],backgroundColor:'rgba(15,52,96,.7)',borderRadius:3}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:12,padding:16,font:{size:11}}}},scales:{y:{beginAtZero:true,ticks:{callback:v=>v+'%',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{size:10}},grid:{display:false}}}}
+  });
+
+  // Inflacion
+  new Chart(document.getElementById('chartInflacion'),{
+    type:'line',
+    data:{
+      labels:['Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic','Ene 26','Feb 26','Mar 26','Abr 26'],
+      datasets:[
+        {label:'México',data:[4.9,4.4,4.3,4.6,4.7,4.8,5.6,5.0,4.6,4.7,4.5,4.2,3.79,3.7,4.59,4.45],borderColor:'#2E5A3A',backgroundColor:'rgba(46,90,58,.08)',tension:.4,borderWidth:2.5,pointRadius:3,fill:true},
+        {label:'EE.UU.',data:[3.1,3.2,3.5,3.4,3.3,3.0,2.9,2.5,2.4,2.6,2.7,2.9,3.0,2.8,3.5,3.8],borderColor:'#0F3460',backgroundColor:'rgba(15,52,96,.06)',tension:.4,borderWidth:2.5,pointRadius:3,fill:true}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{position:'top',labels:{boxWidth:12,padding:16,font:{size:11}}}},scales:{y:{ticks:{callback:v=>v+'%',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'}},x:{ticks:{font:{size:9},maxRotation:45},grid:{display:false}}}}
+  });
+
+  // Comparativo horizontal
+  new Chart(document.getElementById('chartComp'),{
+    type:'bar',
+    data:{
+      labels:['Inflación (%)','Tasa de interés (%)','Crecimiento PIB (%)','Desempleo (%)'],
+      datasets:[
+        {label:'México',data:[4.45,6.5,0.2,2.4],backgroundColor:'rgba(46,90,58,.75)',borderRadius:4,barThickness:28},
+        {label:'EE.UU.',data:[3.8,3.625,2.0,4.3],backgroundColor:'rgba(15,52,96,.75)',borderRadius:4,barThickness:28}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,indexAxis:'y',plugins:{legend:{position:'top',labels:{boxWidth:12,padding:16,font:{size:11}}}},scales:{x:{ticks:{callback:v=>v+'%',font:{size:11}},grid:{color:'rgba(0,0,0,.05)'}},y:{ticks:{font:{size:12,weight:'500'}},grid:{display:false}}}}
+  });
+}
+
+function initChartFX(){
+  new Chart(document.getElementById('chartFX'),{
+    type:'line',
+    data:{
+      labels:['Ene 23','Mar 23','May 23','Jul 23','Sep 23','Nov 23','Ene 24','Mar 24','May 24','Jul 24','Sep 24','Nov 24','Ene 25','Mar 25','May 25','Jul 25','Sep 25','Nov 25','Ene 26','Mar 26','May 26'],
+      datasets:[{
+        label:'USD/MXN',
+        data:[18.9,18.2,17.6,16.9,17.1,17.2,17.2,16.8,17.0,17.3,19.6,20.4,20.5,20.2,19.8,19.2,18.6,18.1,17.8,17.4,17.22],
+        borderColor:'#C8922A',backgroundColor:'rgba(200,146,42,.08)',tension:.4,borderWidth:2.5,pointRadius:3,fill:true,
+        pointBackgroundColor:'#C8922A'
+      }]
+    },
+    options:{
+      responsive:true,maintainAspectRatio:false,
+      plugins:{
+        legend:{display:false},
+        tooltip:{callbacks:{label:ctx=>`$${ctx.parsed.y.toFixed(2)} MXN/USD`}}
+      },
+      scales:{
+        y:{min:16,max:22,ticks:{callback:v=>'$'+v,font:{size:11}},grid:{color:'rgba(0,0,0,.05)'}},
+        x:{ticks:{font:{size:10},maxRotation:45},grid:{display:false}}
+      }
     }
   });
+}
+
+function initChartRadar(){
+  new Chart(document.getElementById('chartRadar'),{
+    type:'radar',
+    data:{
+      labels:['Riesgo cambiario','Estancamiento PIB','Shock energético','Incert. T-MEC','Regulaciones amb.','Balanza pagos'],
+      datasets:[
+        {label:'Nivel de riesgo',data:[8,8,7,6,4,4],backgroundColor:'rgba(184,50,48,.15)',borderColor:'rgba(184,50,48,.8)',pointBackgroundColor:'rgba(184,50,48,.8)',borderWidth:2},
+        {label:'Capacidad de respuesta',data:[6,4,5,5,8,7],backgroundColor:'rgba(46,90,58,.15)',borderColor:'rgba(46,90,58,.8)',pointBackgroundColor:'rgba(46,90,58,.8)',borderWidth:2}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,scales:{r:{min:0,max:10,ticks:{stepSize:2,font:{size:9}},grid:{color:'rgba(0,0,0,.08)'},pointLabels:{font:{size:11}}}},plugins:{legend:{position:'top',labels:{boxWidth:12,padding:12,font:{size:11}}}}}
+  });
+}
+
+function initChartDona(){
+  new Chart(document.getElementById('chartDona'),{
+    type:'doughnut',
+    data:{
+      labels:['Riesgo Alto','Riesgo Medio-Alto','Riesgo Medio','Oportunidad'],
+      datasets:[{
+        data:[25,20,35,20],
+        backgroundColor:['rgba(184,50,48,.8)','rgba(200,146,42,.8)','rgba(15,52,96,.7)','rgba(46,122,58,.8)'],
+        borderWidth:0,hoverOffset:6
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:false,cutout:'65%',plugins:{legend:{position:'bottom',labels:{boxWidth:12,padding:12,font:{size:11}}}}}
+  });
+}
+
+// PHOTO UPLOAD
+function loadPhoto(input,containerId){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const container=document.getElementById(containerId);
+    container.innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;display:block"/>`;
+  };
+  reader.readAsDataURL(file);
+}
+
+function loadTeamPhoto(input,containerId){
+  const file=input.files[0];if(!file)return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const container=document.getElementById(containerId);
+    container.innerHTML=`<img src="${e.target.result}" style="width:100%;height:100%;object-fit:cover;display:block"/>`;
+  };
+  reader.readAsDataURL(file);
+}
 </script>
 </body>
 </html>
